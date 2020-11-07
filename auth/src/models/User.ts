@@ -1,10 +1,14 @@
 import mongoose from 'mongoose'
 
 // An interface that decribes the properties that are required to create a new user
-
 interface UserAttrs {
   email: string
   password: string
+}
+
+// An interface that descibes the properties that the user model has
+interface UserModel extends mongoose.Model<any> {
+  build(attrs: UserAttrs): any
 }
 
 const userSchema = new mongoose.Schema({
@@ -24,6 +28,6 @@ userSchema.statics.build = (attrs: UserAttrs) => {
   return new User(attrs)
 }
 
-const User = mongoose.model('User', userSchema)
+const User = mongoose.model<any, UserModel>('User', userSchema)
 
 export { User }
