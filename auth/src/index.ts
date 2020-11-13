@@ -4,6 +4,7 @@ import express from 'express'
 import 'express-async-errors'
 import { json } from 'body-parser'
 import mongoose from 'mongoose'
+import cookieSession from 'cookie-session'
 
 import { currentUserRouter } from './routes/currentuser'
 import { signinRouter } from './routes/signin'
@@ -16,8 +17,23 @@ import { NotFoundError } from './errors/NotFoundError'
 // Init Express
 const app = express()
 
+// This is because we're only serving cookies over https
+// and traffic is being proxied to express via ingress nginx
+// we're telling it to trust traffic as secure even when coming from a proxy
+app.set('trust proxy', true)
+
 // Parse body
 app.use(json())
+
+// Set up cookies
+app.use(
+  cookieSession({
+    // Don't encrpt
+    signed: false,
+    // Only send cookies over https
+    secure: true,
+  })
+)
 
 // Routes
 app.use(currentUserRouter)
@@ -35,6 +51,13 @@ app.use(errorHandler)
 
 // Connect to database and start server
 const connectAndStart = async () => {
+  // check that our env variables are all set up
+
+  // We have to cehck this exists because TS doesn't let us assume it is set
+  // it does this by giving env vars a type of string | undefined so we can't
+  // reference it unless it's been checked
+  if (!process.env.JWT_KEY) throw new Error('Environment var jwt key not found')
+
   try {
     await mongoose.connect('mongodb://auth-mongo-srv:27017/auth', {
       useNewUrlParser: true,
