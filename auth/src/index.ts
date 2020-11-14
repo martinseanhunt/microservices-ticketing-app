@@ -6,6 +6,7 @@ import { json } from 'body-parser'
 import mongoose from 'mongoose'
 import cookieSession from 'cookie-session'
 
+import { currentUser } from './middlewares/currentUser'
 import { currentUserRouter } from './routes/currentuser'
 import { signinRouter } from './routes/signin'
 import { signoutRouter } from './routes/signout'
@@ -34,6 +35,9 @@ app.use(
     secure: true,
   })
 )
+
+// Current user middleware attatches user JWT info to req
+app.use(currentUser)
 
 // Routes
 app.use(currentUserRouter)

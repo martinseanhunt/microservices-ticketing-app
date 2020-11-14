@@ -1,11 +1,12 @@
 import express, { Request, Response } from 'express'
-import { body, validationResult } from 'express-validator'
-import jwt from 'jsonwebtoken'
+import { body } from 'express-validator'
 
 import { User } from '../models/User'
 
-import { RequestValidationError } from '../errors/RequestValidationError'
 import { BadRequestError } from '../errors/BadRequestError'
+import { handleValidationErrors } from '../middlewares/handleValidationErrors'
+
+import { generateUserJwt } from '../utils/generateUserJwt'
 
 const router = express.Router()
 
@@ -18,11 +19,8 @@ router.post(
       .isLength({ min: 4 })
       .withMessage('Password must be more than 4 chars'),
   ],
+  handleValidationErrors,
   async (req: Request, res: Response) => {
-    // Get errors from validation middleware
-    const errors = validationResult(req)
-    if (!errors.isEmpty()) throw new RequestValidationError(errors.array())
-
     // get properties from body
     const { email, password } = req.body
 
@@ -45,22 +43,14 @@ router.post(
     // UNLESS: we use service workers, I don't think using a SW is a good idea but something to
     // be aware of.
 
-    // generate JWT
-    const userJWT = jwt.sign(
-      {
-        email: user.email,
-        id: user.id,
-      },
-      // We're checking this exists when the server starts so we can use ! to suppress
-      // the error message from TS
-      process.env.JWT_KEY!
-    )
-
-    // Store it on the session object
+    // Generate a JWT and store it on the session object
     req.session = {
-      jwt: userJWT,
+      jwt: generateUserJwt(user),
     }
 
+    // Send back a version of the user object which is formatted to our spec
+    // We're doing this by adding the toJSON property on to the object within
+    // our user model which modifies how JSON.stringify processes the object
     res.status(201).send(user)
   }
 )

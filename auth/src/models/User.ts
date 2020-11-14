@@ -14,23 +14,40 @@ interface UserModel extends mongoose.Model<UserDoc> {
 }
 
 // An interface that describes the properties that a User Document has.
-interface UserDoc extends mongoose.Document {
+export interface UserDoc extends mongoose.Document {
   email: string
   password: string
   // If there are other properties which get added in along the creation pipeline or by mongoose
   // you'd add them in here.
 }
 
-const userSchema = new mongoose.Schema({
-  email: {
-    type: String,
-    required: true,
+const userSchema = new mongoose.Schema(
+  {
+    email: {
+      type: String,
+      required: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
   },
-  password: {
-    type: String,
-    required: true,
-  },
-})
+  {
+    // This is going to define wha properties we see when using JSON.stringinfy on the
+    // object. E.g. when returning the user object when responding to an incoming API request
+    toJSON: {
+      transform: (doc, ret) => {
+        // make direct changes to the ret object (which is the stringified version of the document)
+        // in order to see them reflected in what gets returned from JSON.stringifyt
+        delete ret.password
+        ret.id = ret._id
+        delete ret._id
+      },
+    },
+    // deletes the __V property
+    versionKey: false,
+  }
+)
 
 // Pre save hook to hash the password
 // using regular function syntax because we're making use of 'this'
