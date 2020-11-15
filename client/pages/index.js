@@ -1,75 +1,89 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { Button, Box, Text, Link, Image, useColorMode } from '@chakra-ui/react'
 
 import Head from 'next/head'
-import styles from '../styles/Home.module.css'
 
 export default function Home() {
+  const { colorMode, toggleColorMode } = useColorMode()
+
+  const [user, setUser] = useState()
+  const [errors, setErrors] = useState()
+
   useEffect(() => {
     const get = async () => {
       const res = await (await fetch('/api/users/currentUser')).json()
-      console.log(res)
+      setUser(res.currentUser)
     }
     get()
   }, [])
 
+  const signUp = async () => {
+    setErrors()
+    const res = await (
+      await fetch('/api/users/signup', {
+        method: 'POST',
+        headers: {
+          ['content-type']: 'application/json',
+        },
+        body: JSON.stringify({
+          email: `${Math.random()}@martin.com`,
+          password: 'trees',
+        }),
+      })
+    ).json()
+    if (res.errors) return setErrors(res.errors)
+
+    setUser(res)
+  }
+
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <div>
+      <Button onClick={toggleColorMode}>
+        Toggle {colorMode === 'light' ? 'Dark' : 'Light'}
+      </Button>
+      <h1>
+        Welcome to <a href="https://nextjs.org">Next.js {user?.email}!</a>
+      </h1>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+      <Button onClick={signUp}>Sign up</Button>
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
+      {errors && <blockquote>{errors.map((e) => e.message)}</blockquote>}
 
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
+      <Box p={4} display={{ md: 'flex' }}>
+        <Box flexShrink={0}>
+          <Image
+            borderRadius="lg"
+            width={{ md: 40 }}
+            src="https://bit.ly/2jYM25F"
+            alt="Woman paying for a purchase"
+          />
+        </Box>
+        <Box mt={{ base: 4, md: 0 }} ml={{ md: 6 }}>
+          <Text
+            fontWeight="bold"
+            textTransform="uppercase"
+            fontSize="sm"
+            letterSpacing="wide"
+            color="pink.600"
           >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
+            Marketing
+          </Text>
+          <Link
+            mt={1}
+            display="block"
+            fontSize="lg"
+            lineHeight="normal"
+            fontWeight="semibold"
+            href="#"
           >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
+            Finding customers for your new business
+          </Link>
+          <Text mt={2} color="gray.500">
+            Getting a new business off the ground is a lot of hard work. Here
+            are five ideas you can use to find your first customers.
+          </Text>
+        </Box>
+      </Box>
     </div>
   )
 }
