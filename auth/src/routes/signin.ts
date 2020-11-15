@@ -27,7 +27,6 @@ router.post(
 
     // Compare the password
     const correctPassword = await Password.compare(user.password, password)
-    console.log(correctPassword)
     if (!correctPassword) throw new AuthorizationError('Wrong password')
 
     // Generate a JWT and store it on the session object
