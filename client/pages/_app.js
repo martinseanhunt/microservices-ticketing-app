@@ -1,9 +1,6 @@
 import { ChakraProvider, extendTheme, Container } from '@chakra-ui/react'
 import { mode } from '@chakra-ui/theme-tools'
-
-import CurrentUserProvider from '../contexts/CurrentUser'
-
-import Header from '../components/Layout/Header'
+import axios from 'axios'
 
 const config = {
   useSystemColorMode: false,
@@ -21,17 +18,26 @@ const customTheme = extendTheme({
   config,
 })
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps, currentUser }) {
   return (
     <ChakraProvider theme={customTheme}>
-      <CurrentUserProvider>
-        <Container maxW="lg">
-          <Header />
-          <Component {...pageProps} />
-        </Container>
-      </CurrentUserProvider>
+      <Component {...pageProps} />
     </ChakraProvider>
   )
+}
+
+export async function getInitialProps(context) {
+  currentUser = null
+  console.log('hello')
+  try {
+    const res = await axios.get(url)
+    currentUser = res.data.currentUser
+    console.log(res)
+  } catch (e) {
+    console.error(e)
+  }
+
+  return { props: { currentUser } }
 }
 
 export default MyApp

@@ -2,17 +2,24 @@ import Link from 'next/link'
 import { Grid, Heading, Button, useColorMode } from '@chakra-ui/react'
 import { SunIcon } from '@chakra-ui/icons'
 
-import { signout } from '../../lib/api'
+import useRequest from '../../hooks/useRequest'
 import { useCurrentUser } from '../../contexts/CurrentUser'
 
 export default function Header() {
   const { colorMode, toggleColorMode } = useColorMode()
   const { currentUser, setCurrentUser } = useCurrentUser()
 
-  const onSignout = async () => {
-    await signout()
-    setCurrentUser(null)
-  }
+  console.log(currentUser)
+
+  const { doRequest } = useRequest({
+    url: '/api/users/signout',
+    method: 'POST',
+    onSuccess: () => {
+      setCurrentUser(null)
+    },
+  })
+
+  const onSignout = async () => await doRequest()
 
   return (
     <Grid

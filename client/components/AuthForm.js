@@ -17,20 +17,26 @@ import {
 } from '@chakra-ui/react'
 
 import { useCurrentUser } from '../contexts/CurrentUser'
+import useRequest from '../hooks/useRequest'
 
-export default function AuthForm({ apiMethod }) {
+export default function AuthForm({ apiUrl }) {
   const router = useRouter()
   const { currentUser, setCurrentUser } = useCurrentUser()
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [errors, setErrors] = useState()
+
   const [formValuesState, setFormValuesState] = useState({
     email: '',
     password: '',
   })
 
-  useEffect(() => {
-    if (currentUser) router.push('/')
-  }, [currentUser])
+  const { doRequest, isSubmitting, errors } = useRequest({
+    url: apiUrl,
+    method: 'POST',
+    body: formValuesState,
+    onSuccess: (data) => {
+      setCurrentUser(data)
+      router.push('/')
+    },
+  })
 
   const onChange = ({ target }) => {
     setFormValuesState((existingValues) => ({
@@ -41,16 +47,7 @@ export default function AuthForm({ apiMethod }) {
 
   const onSubmit = async (e) => {
     e.preventDefault()
-    setErrors()
-    setIsSubmitting(true)
-
-    const { email, password } = formValuesState
-    const res = await apiMethod(email, password)
-    setIsSubmitting(false)
-
-    if (res.errors) return setErrors(res.errors)
-
-    setCurrentUser(res)
+    await doRequest()
   }
 
   // TODO: Field level JS validation
