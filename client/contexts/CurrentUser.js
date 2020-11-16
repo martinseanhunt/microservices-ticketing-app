@@ -1,5 +1,7 @@
 import { createContext, useContext, useState, useEffect } from 'react'
 
+import { getCurrentUser } from '../lib/api'
+
 const CurrentUser = createContext()
 const useCurrentUser = () => useContext(CurrentUser)
 
@@ -8,8 +10,7 @@ const CurrentUserProvider = (props) => {
 
   useEffect(() => {
     const get = async () => {
-      // TODO: move this in to an API folder
-      const res = await (await fetch('/api/users/currentUser')).json()
+      const res = await getCurrentUser()
       setCurrentUser(res.currentUser)
     }
     get()

@@ -2,21 +2,15 @@ import Link from 'next/link'
 import { Grid, Heading, Button, useColorMode } from '@chakra-ui/react'
 import { SunIcon } from '@chakra-ui/icons'
 
+import { signout } from '../../lib/api'
 import { useCurrentUser } from '../../contexts/CurrentUser'
 
 export default function Header() {
-  const { toggleColorMode } = useColorMode()
+  const { colorMode, toggleColorMode } = useColorMode()
   const { currentUser, setCurrentUser } = useCurrentUser()
 
-  // TODO: move this
-  const signOut = async () => {
-    const res = await (
-      await fetch('/api/users/signout', {
-        method: 'POST',
-      })
-    ).json()
-    if (res.errors) return console.error(res.errors)
-
+  const onSignout = async () => {
+    await signout()
     setCurrentUser(null)
   }
 
@@ -38,21 +32,30 @@ export default function Header() {
         pt={['10px', '0']}
       >
         {currentUser ? (
-          <Button size="sm" onClick={signOut}>
+          <Button size="sm" onClick={onSignout}>
             Sign Out
           </Button>
         ) : (
           <>
             <Link href="/signup">
-              <Button size="sm">Sign Up</Button>
+              <Button size="sm" colorScheme="pink" variant="outline">
+                Sign Up
+              </Button>
             </Link>
-            <Link href="/login">
-              <Button size="sm">Login</Button>
+            <Link href="/signin">
+              <Button size="sm" colorScheme="pink" variant="outline">
+                Sign In
+              </Button>
             </Link>
           </>
         )}
 
-        <Button size="sm" onClick={toggleColorMode}>
+        <Button
+          colorScheme="pink"
+          size="sm"
+          onClick={toggleColorMode}
+          variant={colorMode === 'light' ? 'outline' : 'solid'}
+        >
           <SunIcon />
         </Button>
       </Grid>
