@@ -9,8 +9,6 @@ export default function Header() {
   const { colorMode, toggleColorMode } = useColorMode()
   const { currentUser, setCurrentUser } = useCurrentUser()
 
-  console.log(currentUser)
-
   const { doRequest } = useRequest({
     url: '/api/users/signout',
     method: 'POST',

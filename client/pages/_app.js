@@ -1,6 +1,5 @@
-import { ChakraProvider, extendTheme, Container } from '@chakra-ui/react'
+import { ChakraProvider, extendTheme } from '@chakra-ui/react'
 import { mode } from '@chakra-ui/theme-tools'
-import axios from 'axios'
 
 const config = {
   useSystemColorMode: false,
