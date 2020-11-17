@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
+import { useState, useEffect } from 'react'
+import { Router, useRouter } from 'next/router'
 
 import {
   Button,
@@ -14,12 +14,13 @@ import {
   AlertIcon,
   AlertTitle,
   AlertDescription,
+  useEditable,
 } from '@chakra-ui/react'
 
 import { useCurrentUser } from '../contexts/CurrentUser'
 import useRequest from '../hooks/useRequest'
 
-export default function AuthForm({ apiUrl }) {
+export default function AuthForm({ apiUrl, title }) {
   const router = useRouter()
   const { currentUser, setCurrentUser } = useCurrentUser()
 
@@ -37,6 +38,10 @@ export default function AuthForm({ apiUrl }) {
       router.push('/')
     },
   })
+
+  useEffect(() => {
+    if (currentUser) router.push('/')
+  }, [])
 
   const onChange = ({ target }) => {
     setFormValuesState((existingValues) => ({
@@ -56,7 +61,7 @@ export default function AuthForm({ apiUrl }) {
     <>
       <Container p={0} mb={2} mt={9}>
         <Heading as="h1" size="md">
-          Join us! You know you want to
+          {title}
         </Heading>
       </Container>
       <Container border="1px solid" borderRadius="lg" p={30}>

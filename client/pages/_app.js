@@ -26,18 +26,4 @@ function MyApp({ Component, pageProps, currentUser }) {
   )
 }
 
-export async function getInitialProps(context) {
-  currentUser = null
-  console.log('hello')
-  try {
-    const res = await axios.get(url)
-    currentUser = res.data.currentUser
-    console.log(res)
-  } catch (e) {
-    console.error(e)
-  }
-
-  return { props: { currentUser } }
-}
-
 export default MyApp

@@ -9,7 +9,7 @@ import { Container } from '@chakra-ui/react'
 import CurrentUserProvider from '../../contexts/CurrentUser'
 import Header from './Header'
 
-export default function Home({ currentUser, children }) {
+export default function Home({ currentUser, children, render }) {
   return (
     <CurrentUserProvider value={currentUser}>
       <Container maxW="lg">
