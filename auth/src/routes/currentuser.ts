@@ -1,7 +1,5 @@
 import express from 'express'
 
-import { protectedRoute } from '@mhunt/ticketing-common'
-
 const router = express.Router()
 
 router.get('/api/users/currentuser', async (req, res) => {
