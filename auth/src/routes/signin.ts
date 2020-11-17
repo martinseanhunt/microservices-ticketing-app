@@ -1,11 +1,14 @@
 import express, { Request, Response } from 'express'
 import { body } from 'express-validator'
 
+import {
+  AuthorizationError,
+  handleValidationErrors,
+} from '@mhunt/ticketing-common'
+
 import { User } from '../models/User'
 import { Password } from '../utils/Password'
 
-import { AuthorizationError } from '../errors/AuthorizationError'
-import { handleValidationErrors } from '../middlewares/handleValidationErrors'
 import { generateUserJwt } from '../utils/generateUserJwt'
 
 const router = express.Router()

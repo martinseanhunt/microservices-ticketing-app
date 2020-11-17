@@ -5,14 +5,16 @@ import 'express-async-errors'
 import { json } from 'body-parser'
 import cookieSession from 'cookie-session'
 
-import { currentUser } from './middlewares/currentUser'
+import {
+  NotFoundError,
+  errorHandler,
+  currentUser,
+} from '@mhunt/ticketing-common'
+
 import { currentUserRouter } from './routes/currentuser'
 import { signinRouter } from './routes/signin'
 import { signoutRouter } from './routes/signout'
 import { signupRouter } from './routes/signup'
-import { errorHandler } from './middlewares/errorHandler'
-
-import { NotFoundError } from './errors/NotFoundError'
 
 // Init Express
 const app = express()

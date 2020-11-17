@@ -1,6 +1,6 @@
 import express from 'express'
 
-import { protectedRoute } from '../middlewares/protectedRoute'
+import { protectedRoute } from '@mhunt/ticketing-common'
 
 const router = express.Router()
 

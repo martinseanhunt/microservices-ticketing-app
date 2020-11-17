@@ -3,8 +3,10 @@ import { body } from 'express-validator'
 
 import { User } from '../models/User'
 
-import { BadRequestError } from '../errors/BadRequestError'
-import { handleValidationErrors } from '../middlewares/handleValidationErrors'
+import {
+  BadRequestError,
+  handleValidationErrors,
+} from '@mhunt/ticketing-common'
 
 import { generateUserJwt } from '../utils/generateUserJwt'
 
