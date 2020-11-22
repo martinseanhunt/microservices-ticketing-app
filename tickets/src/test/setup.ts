@@ -1,13 +1,14 @@
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import mongoose from 'mongoose'
 import request from 'supertest'
+import jwt from 'jsonwebtoken'
 
 import { app } from '../app'
 
 declare global {
   namespace NodeJS {
     interface Global {
-      signIn: (user?: { email: string; password: string }) => Promise<string[]>
+      signIn: (user?: { email: string; id: string }) => string
     }
   }
 }
@@ -18,9 +19,9 @@ declare global {
 let mongo: any
 
 beforeAll(async () => {
-  // Set the environbment variables... There are better ways of
-  // doing this!
-  process.env.JWT_KEY = 'adiojwj'
+  // Set the environbment variables for our app when we're running tests...
+  // There are better ways of doing this but this is quick!
+  process.env.JWT_KEY = 'segsegsegs'
 
   // start up an in memory version of mongo and have our app connect to it
   mongo = new MongoMemoryServer()
@@ -51,20 +52,17 @@ afterAll(async () => {
 })
 
 // globally scoped helper function.. I don't think this is a good idea!
-// but fine for the purpose of this non-testing focused course
-// should really be imported in, or use jest config to provide it to every test file
-global.signIn = async (user) => {
+// but fine for the purpose of this non-testing focused course. We should import,
+// or have jest import it for us.
+global.signIn = (user) => {
   const validUser = {
     email: 'test@test.com',
-    password: '1234',
+    id: '1234',
   }
 
-  const res = await request(app)
-    .post('/api/users/signup')
-    .send(user || validUser)
-    .expect(201)
+  // ! on the jwt key iis fine to use I think as it's explicityl defined above.
+  const token = jwt.sign(user || validUser, process.env.JWT_KEY!)
+  const cookie = Buffer.from(JSON.stringify({ jwt: token })).toString('base64')
 
-  const cookie = res.get('Set-Cookie')
-
-  return cookie
+  return `express:sess=${cookie}`
 }

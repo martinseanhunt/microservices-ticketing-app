@@ -10,7 +10,7 @@ const connectAndStart = async () => {
   // reference it unless it's been checked
   if (!process.env.JWT_KEY) throw new Error('Environment var jwt key not found')
   if (!process.env.MONGO_URI)
-    throw new Error('Environment var jwt key not found')
+    throw new Error('Environment var MONGO_URI not found')
 
   try {
     await mongoose.connect(process.env.MONGO_URI, {
@@ -24,7 +24,7 @@ const connectAndStart = async () => {
   }
 
   // Start server
-  app.listen(3000, () => console.log('Auth service listening on 3000!'))
+  app.listen(3000, () => console.log('Tickets service listening on 3000!'))
 }
 
 connectAndStart()
