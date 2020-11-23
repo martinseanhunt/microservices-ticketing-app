@@ -12,6 +12,8 @@ import {
 } from '@mhunt/ticketing-common'
 
 import { createTicketRouter } from './routes/new'
+import { getTicketRouter } from './routes/show'
+import { getTicketsRouter } from './routes/index'
 
 // Init Express
 const app = express()
@@ -40,6 +42,8 @@ app.use(currentUser)
 
 // Routes
 app.use(createTicketRouter)
+app.use(getTicketRouter)
+app.use(getTicketsRouter)
 
 // Catch all route handler and 404
 app.all('*', () => {
