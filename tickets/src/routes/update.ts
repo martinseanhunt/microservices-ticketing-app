@@ -34,8 +34,10 @@ router.put(
     if (ticket.userId !== req.currentUser?.id)
       throw new AuthorizationError('Not your ticket! GETTTOUUUTAHERE')
 
-    ticket.price = price
-    ticket.title = title
+    ticket.set({
+      price,
+      title,
+    })
 
     await ticket.save()
 
