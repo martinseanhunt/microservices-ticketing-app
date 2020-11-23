@@ -8,7 +8,7 @@ interface UserAttrs {
   password: string
 }
 
-// An interface that descibes the properties that the user model has
+// An interface that descibes the properties / methods that the user model has
 interface UserModel extends mongoose.Model<UserDoc> {
   build(attrs: UserAttrs): UserDoc
 }
@@ -33,15 +33,14 @@ const userSchema = new mongoose.Schema(
     },
   },
   {
-    // This is going to define wha properties we see when using JSON.stringinfy on the
+    // This is going to define what properties we see when using JSON.stringinfy on the
     // object. E.g. when returning the user object when responding to an incoming API request
     toJSON: {
       transform: (doc, ret) => {
-        // make direct changes to the ret object (which is the stringified version of the document)
+        // make direct changes to the ret object (which is the plain object version of the document)
         // in order to see them reflected in what gets returned from JSON.stringifyt
         delete ret.password
         ret.id = ret._id
-        delete ret._id
       },
     },
     // deletes the __V property
