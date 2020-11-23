@@ -14,6 +14,7 @@ import {
 import { createTicketRouter } from './routes/new'
 import { getTicketRouter } from './routes/show'
 import { getTicketsRouter } from './routes/index'
+import { updateTicketRouter } from './routes/update'
 
 // Init Express
 const app = express()
@@ -44,6 +45,7 @@ app.use(currentUser)
 app.use(createTicketRouter)
 app.use(getTicketRouter)
 app.use(getTicketsRouter)
+app.use(updateTicketRouter)
 
 // Catch all route handler and 404
 app.all('*', () => {
