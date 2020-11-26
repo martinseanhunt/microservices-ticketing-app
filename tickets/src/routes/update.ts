@@ -9,6 +9,8 @@ import {
 } from '@mhunt/ticketing-common'
 
 import { Ticket } from '../models/Ticket'
+import { TicketUpdatedPublisher } from '../events/publsihers/TicketUpdatedPublisher'
+import { natsWrapper } from '../events/natsWrapper'
 
 const router = express.Router()
 
@@ -40,6 +42,15 @@ router.put(
     })
 
     await ticket.save()
+
+    const updated = new TicketUpdatedPublisher(natsWrapper.client).publish({
+      id: ticket.id,
+      userId: ticket.userId,
+      title: ticket.title,
+      price: ticket.price,
+    })
+
+    updated.then((result) => console.log(result))
 
     return res.status(200).send(ticket)
   }
