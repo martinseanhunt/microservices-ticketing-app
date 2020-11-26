@@ -3,6 +3,9 @@ import request from 'supertest'
 import { app } from '../../app'
 import { Ticket } from '../../models/Ticket'
 
+// This is the mocked implementation
+import { natsWrapper } from '../../events/natsWrapper'
+
 // TDD approach here
 
 it('has a route handler listening to /api/tickets/ for post reqs', async () => {
@@ -66,6 +69,25 @@ it('creates a ticket with valid inputs', async () => {
   expect(tickets[0].title).toBe('test')
 
   expect(res.status).toBe(201)
+})
+
+it('publishes an event', async () => {
+  // Checking the ticket was added to the database.
+  // See how many records there are now
+  let tickets = await Ticket.find({})
+
+  // Should always be 0 because we're clearing them before each test in setup.ts
+  expect(tickets.length).toBe(0)
+
+  const cookie = global.signIn()
+  await request(app)
+    .post('/api/tickets')
+    .set('Cookie', cookie)
+    .send({ title: 'test', price: 234.0 })
+    .expect(201)
+
+  // this could be way better ;)
+  expect(natsWrapper.client.publish).toHaveBeenCalled()
 })
 
 // Test to see that the ticket object is actually returned from creation

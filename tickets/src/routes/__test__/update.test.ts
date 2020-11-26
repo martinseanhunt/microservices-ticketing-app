@@ -3,6 +3,7 @@ import mongoose from 'mongoose'
 
 import { app } from '../../app'
 import { Ticket } from '../../models/Ticket'
+import { natsWrapper } from '../../events/natsWrapper'
 
 const id = mongoose.Types.ObjectId().toHexString()
 
@@ -125,4 +126,37 @@ it('updatest the ticket provided valid inputs', async () => {
   // check the database
   const dbRecord = await Ticket.findById(ticketId)
   expect(dbRecord?.title).toEqual(title)
+})
+
+it('publishes an event', async () => {
+  const testUser = {
+    id: mongoose.Types.ObjectId().toHexString(),
+    email: 'test@tst.com',
+  }
+
+  // create a ticket where the userID is the same as our id
+  const ticket = Ticket.build({
+    userId: testUser.id,
+    title: '123',
+    price: 12.5,
+  })
+
+  await ticket.save()
+
+  const updates = {
+    title: 'test',
+    price: 12.4,
+  }
+
+  // Try to update our newly created ticket
+  const res = await request(app)
+    .put(`/api/tickets/${ticket.id}`)
+    // sign in with our fake user
+    .set('Cookie', global.signIn(testUser))
+    .send(updates)
+
+  expect(res.status).toBe(200)
+
+  // this could be way better ;)
+  expect(natsWrapper.client.publish).toHaveBeenCalled()
 })

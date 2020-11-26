@@ -3,6 +3,11 @@ import mongoose from 'mongoose'
 import request from 'supertest'
 import jwt from 'jsonwebtoken'
 
+// mocking the natsWrapper so we don't connect to the live nats server
+// grabs the mock implemetnation for __mocks__ in the same dir as the import
+// we're mocking. It's used so commonly that I'm mocking it here for all the test suites
+jest.mock('../events/natsWrapper')
+
 import { app } from '../app'
 
 declare global {
@@ -43,11 +48,16 @@ beforeEach(async () => {
     // Delete all docs within a collection ?
     await collection.deleteMany({})
   }
+
+  // clear mock implemtnations
+  jest.clearAllMocks()
 })
 
 afterAll(async () => {
   // stop the instance and close connection
   await mongo.stop()
+
+  // This is acting a bit funny sometimes - TODO: debug
   await mongoose.connection.close()
 })
 

@@ -13,6 +13,13 @@ const connectAndStart = async () => {
   if (!process.env.MONGO_URI)
     throw new Error('Environment var MONGO_URI not found')
 
+  if (
+    !process.env.NATS_URI ||
+    !process.env.NATS_CLUSTER_ID ||
+    !process.env.NATS_CLIENT_ID
+  )
+    throw new Error('Environment variables for NATS not found')
+
   try {
     await mongoose.connect(process.env.MONGO_URI, {
       useNewUrlParser: true,
@@ -29,9 +36,12 @@ const connectAndStart = async () => {
     // here we know that the client will always be connected at the point we try to
     // use it.
     await natsWrapper.connect(
-      'nats-ticketing',
-      'tickting-service',
-      'http://nats-srv:4222'
+      process.env.NATS_CLUSTER_ID,
+      // Remember, this  needs to be unique so that when we have multiple instances
+      // of a service running each instance has it's own nats client ID
+      // all client ID's connected to the nats server needs to be unique
+      process.env.NATS_CLIENT_ID,
+      process.env.NATS_URI
     )
 
     // listening for the close event and shutting down the server when

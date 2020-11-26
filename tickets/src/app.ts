@@ -38,11 +38,6 @@ app.use(
   })
 )
 
-app.use((req, res, next) => {
-  console.log('test')
-  next()
-})
-
 // Current user middleware attatches user JWT info to req
 app.use(currentUser)
 
