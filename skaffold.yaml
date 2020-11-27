@@ -24,6 +24,16 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
+    - image: martinseanhunt/ticketing-orders
+      context: orders
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '**/*.js'
+            dest: .
+          - src: '**/*.css'
+            dest: .
     - image: martinseanhunt/ticketing/client
       context: client
       docker:
