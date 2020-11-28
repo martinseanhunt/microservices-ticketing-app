@@ -5,6 +5,11 @@ import 'express-async-errors'
 import { json } from 'body-parser'
 import cookieSession from 'cookie-session'
 
+import { getOrdersRouter } from './routes/index'
+import { getOrderRouter } from './routes/show'
+import { createOrderRouter } from './routes/new'
+import { deleteOrderRouter } from './routes/delete'
+
 import {
   NotFoundError,
   errorHandler,
@@ -37,9 +42,10 @@ app.use(
 app.use(currentUser)
 
 // Routes
-app.get('/api/orders', (req, res) => {
-  return res.send('hello')
-})
+app.use(getOrdersRouter)
+app.use(getOrderRouter)
+app.use(createOrderRouter)
+app.use(deleteOrderRouter)
 
 // Catch all route handler and 404
 app.all('*', () => {

@@ -467,9 +467,9 @@
     chalk "^4.0.0"
 
 "@mhunt/ticketing-common@^1.0.8":
-  version "1.0.13"
-  resolved "https://registry.yarnpkg.com/@mhunt/ticketing-common/-/ticketing-common-1.0.13.tgz#e2ab92c82ade6529da115a502b01354d384b3cef"
-  integrity sha512-4WU3TFebYMs7VvAH0+hjjgxdumHchU5eTJWLLwEzpjGLuoRaZ1dm9x23g46FnUry1t0azV577DW3zaThp4lVYg==
+  version "1.0.14"
+  resolved "https://registry.yarnpkg.com/@mhunt/ticketing-common/-/ticketing-common-1.0.14.tgz#59dd01b392221d99d5d19b5b46c828c89e7bb9c4"
+  integrity sha512-NpHp58lJwNvTCM2UuQw+lTQ54fqhQFzK22855wSXl5rU7rNDjwidrRTHIxn35ycJWpuBUDHtY6qtW1Lxjq5SHg==
   dependencies:
     "@types/cookie-session" "^2.0.41"
     "@types/express" "^4.17.9"
@@ -3566,9 +3566,9 @@ mongoose-legacy-pluralize@1.0.2:
   integrity sha512-Yo/7qQU4/EyIS8YDFSeenIvXxZN+ld7YdV9LqFVQJzTLye8unujAWPZ4NWKfFA+RNjh+wvTWKY9Z3E5XM6ZZiQ==
 
 mongoose@^5.10.13:
-  version "5.10.16"
-  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-5.10.16.tgz#2b5c2ad8cc52166684261f779d882ffeb2d5b68f"
-  integrity sha512-rgfK1lvAQdCZ0buPju7Wny3suls5A1GjYRsv+jrQBVA0N/OhtGKHjr5RXJs0rxQhodwNVfc7O8g4bwDqW4R0sQ==
+  version "5.10.17"
+  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-5.10.17.tgz#8754cdaf0dc7964d512ed1889546528fb42e9eb8"
+  integrity sha512-B7kcEaXbgdTQiloKfr9qQMdo5WOrTKEqIoWY9RWiMMAvbn+8n/vBjBKIH9wc/U+8Y4SIvfRf6kenfWbjLVe2YA==
   dependencies:
     bson "^1.1.4"
     kareem "2.3.1"
