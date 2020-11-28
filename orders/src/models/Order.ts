@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 
 import { OrderStatus } from '@mhunt/ticketing-common'
 
-import { Ticket, TicketDoc } from './Ticket'
+import { TicketDoc } from './Ticket'
 
 // Look at comments in user model for detailed notes on types
 
@@ -66,3 +66,7 @@ orderSchema.statics.build((attrs: OrderAttrs) => {
 const Order = mongoose.model<OrderDoc, OrderModel>('Order', orderSchema)
 
 export { Order }
+
+// exporting the orderstatus coming from our common module here as we're using it all over this
+// service and saves us having to import from common all the time
+export { OrderStatus }

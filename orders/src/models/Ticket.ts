@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-import { OrderStatus } from '@mhunt/ticketing-common'
+import { Order, OrderStatus } from './Order'
 
 // Look at comments in user model for detailed notes on types
 // This collection will be used to store a subset of information
@@ -19,6 +19,8 @@ interface TicketAttrs {
 export interface TicketDoc extends mongoose.Document {
   title: string
   price: number
+  // helper method to find out whether a ticket has been reserved
+  isReserved(): Promise<boolean>
 }
 
 interface TicketModel extends mongoose.Model<TicketDoc> {
@@ -47,9 +49,32 @@ const ticketSchema = new mongoose.Schema(
   }
 )
 
+// Adding a static method on to Ticket
 ticketSchema.statics.build((attrs: TicketAttrs) => {
   return new Ticket(attrs)
 })
+
+// Adding a method to each document (instance of ticket) to find an order which has already
+// reserved this ticket and return whether it exists or not
+ticketSchema.methods.isReserved = async function () {
+  // Make sure the ticket is not already reserved or purchased
+  // if we have a result here we know the ticket is reserved
+  const isTicketAlreadyReserved = await Order.findOne({
+    status: {
+      // Looking for any order associated with the ticket that isn't cancelled
+      $in: [
+        OrderStatus.Created,
+        OrderStatus.AwaitingPayment,
+        OrderStatus.Complete,
+      ],
+    },
+    // mongoose handles comparing the ID's under the hood because
+    // ticket is set up as a ref in the Order model
+    ticket: this,
+  })
+
+  return !!isTicketAlreadyReserved
+}
 
 const Ticket = mongoose.model<TicketDoc, TicketModel>('Ticekt', ticketSchema)
 
