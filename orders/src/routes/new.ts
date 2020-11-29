@@ -5,13 +5,12 @@ import {
   protectedRoute,
   handleValidationErrors,
   NotFoundError,
-  OrderStatus,
   BadRequestError,
+  OrderStatus,
 } from '@mhunt/ticketing-common'
 
 import { Ticket } from '../models/Ticket'
 import { Order } from '../models/Order'
-import e from 'express'
 
 const router = express.Router()
 
@@ -37,7 +36,8 @@ router.post(
 
     // Find out whether the ticket is already reserved usign a helper method we created
     // on the ticket doc in mongoose
-    const isTicketAlreadyReserved = ticket.isReserved()
+    const isTicketAlreadyReserved = await ticket.isReserved()
+
     if (isTicketAlreadyReserved)
       throw new BadRequestError('Ticket is no longer available')
 
@@ -50,7 +50,7 @@ router.post(
       ticket: ticket,
       userId: req.currentUser!.id,
       status: OrderStatus.Created,
-      exiresAt: expiration,
+      expiresAt: expiration,
     })
     await order.save()
 

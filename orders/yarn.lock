@@ -467,9 +467,9 @@
     chalk "^4.0.0"
 
 "@mhunt/ticketing-common@^1.0.8":
-  version "1.0.14"
-  resolved "https://registry.yarnpkg.com/@mhunt/ticketing-common/-/ticketing-common-1.0.14.tgz#59dd01b392221d99d5d19b5b46c828c89e7bb9c4"
-  integrity sha512-NpHp58lJwNvTCM2UuQw+lTQ54fqhQFzK22855wSXl5rU7rNDjwidrRTHIxn35ycJWpuBUDHtY6qtW1Lxjq5SHg==
+  version "1.0.15"
+  resolved "https://registry.yarnpkg.com/@mhunt/ticketing-common/-/ticketing-common-1.0.15.tgz#d2eeee64af60a59876f184191f114564d9aac9d9"
+  integrity sha512-/iDRrLJtA11onqSeVmNRuP26yRM8hk4S/SBHZY54n0o1t7Gv+XbcgKtwr3FHwOVLP33G/oaFFjbolPF02lD/ig==
   dependencies:
     "@types/cookie-session" "^2.0.41"
     "@types/express" "^4.17.9"
@@ -4572,9 +4572,9 @@ spdx-expression-parse@^3.0.0:
     spdx-license-ids "^3.0.0"
 
 spdx-license-ids@^3.0.0:
-  version "3.0.6"
-  resolved "https://registry.yarnpkg.com/spdx-license-ids/-/spdx-license-ids-3.0.6.tgz#c80757383c28abf7296744998cbc106ae8b854ce"
-  integrity sha512-+orQK83kyMva3WyPf59k1+Y525csj5JejicWut55zeTWANuN17qSiSLUXWtzHeNWORSvT7GLDJ/E/XiIWoXBTw==
+  version "3.0.7"
+  resolved "https://registry.yarnpkg.com/spdx-license-ids/-/spdx-license-ids-3.0.7.tgz#e9c18a410e5ed7e12442a549fbd8afa767038d65"
+  integrity sha512-U+MTEOO0AiDzxwFvoa4JVnMV6mZlJKk2sBLt90s7G0Gd0Mlknc7kxEn3nuDPNZRta7O2uy8oLcZLVT+4sqNZHQ==
 
 split-string@^3.0.1, split-string@^3.0.2:
   version "3.1.0"

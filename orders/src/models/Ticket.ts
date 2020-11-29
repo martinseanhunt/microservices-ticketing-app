@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 
-import { Order, OrderStatus } from './Order'
+import { OrderStatus } from '@mhunt/ticketing-common'
+import { Order } from './Order'
 
 // Look at comments in user model for detailed notes on types
 // This collection will be used to store a subset of information
@@ -50,9 +51,9 @@ const ticketSchema = new mongoose.Schema(
 )
 
 // Adding a static method on to Ticket
-ticketSchema.statics.build((attrs: TicketAttrs) => {
+ticketSchema.statics.build = (attrs: TicketAttrs) => {
   return new Ticket(attrs)
-})
+}
 
 // Adding a method to each document (instance of ticket) to find an order which has already
 // reserved this ticket and return whether it exists or not

@@ -9,14 +9,14 @@ import { TicketDoc } from './Ticket'
 interface OrderAttrs {
   userId: string
   status: OrderStatus
-  exiresAt: Date
+  expiresAt: Date
   ticket: TicketDoc
 }
 
 interface OrderDoc extends mongoose.Document {
   userId: string
   status: OrderStatus
-  exiresAt: Date
+  expiresAt: Date
   ticket: TicketDoc
 }
 
@@ -59,14 +59,10 @@ const orderSchema = new mongoose.Schema(
   }
 )
 
-orderSchema.statics.build((attrs: OrderAttrs) => {
+orderSchema.statics.build = (attrs: OrderAttrs) => {
   return new Order(attrs)
-})
+}
 
 const Order = mongoose.model<OrderDoc, OrderModel>('Order', orderSchema)
 
 export { Order }
-
-// exporting the orderstatus coming from our common module here as we're using it all over this
-// service and saves us having to import from common all the time
-export { OrderStatus }
