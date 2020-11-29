@@ -77,6 +77,6 @@ ticketSchema.methods.isReserved = async function () {
   return !!isTicketAlreadyReserved
 }
 
-const Ticket = mongoose.model<TicketDoc, TicketModel>('Ticekt', ticketSchema)
+const Ticket = mongoose.model<TicketDoc, TicketModel>('Ticket', ticketSchema)
 
 export { Ticket }

@@ -124,3 +124,5 @@ it('Creates an order when a valid ID is passed and the existing order assicated 
   expect(createdOrder?.ticket.toString()).toBe(ticket.id)
   expect(createdOrder?.status).toEqual(OrderStatus.Created)
 })
+
+it.todo('Should publish an event on success')
