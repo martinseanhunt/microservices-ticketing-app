@@ -7,7 +7,7 @@ class NatsClientWrapper {
   // ? tells TS that this can be undefined (i.e. before we connect)
   private _client?: Stan
 
-  // Getter allows us to hadnle the logic of what to return when we request this as
+  // Getter allows us to hadnle the logic of what to return when we request 'client' as
   // a property on the instance. This way we can throw an error if there's no client
   // defined at the point we try to get it.
   get client() {

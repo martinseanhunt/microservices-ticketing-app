@@ -7,6 +7,9 @@ import { app } from '../../app'
 import { Ticket } from '../../models/Ticket'
 import { Order } from '../../models/Order'
 
+// This is the mocked nats wrapper
+import { natsWrapper } from '../../events/natsWrapper'
+
 const URI = '/api/orders'
 
 it('Returns 401 if no authed user', async () => {
@@ -125,4 +128,23 @@ it('Creates an order when a valid ID is passed and the existing order assicated 
   expect(createdOrder?.status).toEqual(OrderStatus.Created)
 })
 
-it.todo('Should publish an event on success')
+it('Should publish an event on success', async () => {
+  const ticket = Ticket.build({ title: 'some title', price: 123 })
+  await ticket.save()
+
+  const res = await request(app)
+    .post(URI)
+    .set('Cookie', global.signIn())
+    .send({ ticketId: ticket.id })
+
+  expect(res.status).toBe(201)
+
+  // check that it saved to the DB correctly
+  const order = await Order.findById(res.body.id)
+
+  expect(order).toBeTruthy()
+  expect(order?.ticket.toString()).toBe(ticket.id)
+  expect(order?.status).toEqual(OrderStatus.Created)
+
+  expect(natsWrapper.client.publish).toHaveBeenCalledTimes(1)
+})

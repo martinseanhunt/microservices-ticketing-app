@@ -24,7 +24,7 @@ router.get(
       .populate('ticket')
     if (!order) throw new NotFoundError()
 
-    await res.send(order)
+    return res.send(order)
   }
 )
 

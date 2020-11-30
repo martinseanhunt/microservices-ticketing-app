@@ -14,7 +14,7 @@ router.get(
       'ticket'
     )
 
-    await res.send(orders)
+    return res.status(200).send(orders)
   }
 )
 

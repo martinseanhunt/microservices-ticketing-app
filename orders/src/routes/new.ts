@@ -11,6 +11,8 @@ import {
 
 import { Ticket } from '../models/Ticket'
 import { Order } from '../models/Order'
+import { natsWrapper } from '../events/natsWrapper'
+import { OrderCreatedPublisher } from '../events/publsihers/OrderCreatedPublisher'
 
 const router = express.Router()
 
@@ -55,9 +57,19 @@ router.post(
     await order.save()
 
     // Publish an event saying that an orer was created.
-    // TODO
+    const pub = await new OrderCreatedPublisher(natsWrapper.client).publish({
+      id: order.id,
+      status: order.status,
+      userId: order.userId,
+      expiresAt: order.expiresAt.toISOString(),
+      ticket: {
+        id: order.ticket.id,
+        price: order.ticket.price,
+      },
+    })
+    console.log(pub)
 
-    res.status(201).send(order)
+    return res.status(201).send(order)
   }
 )
 
