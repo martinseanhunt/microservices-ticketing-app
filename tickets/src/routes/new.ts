@@ -51,6 +51,7 @@ router.post(
       userId: ticket.userId,
       title: ticket.title,
       price: ticket.price,
+      version: ticket.version,
     })
 
     published.then((result) => console.log(result))

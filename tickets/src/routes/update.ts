@@ -48,6 +48,7 @@ router.put(
       userId: ticket.userId,
       title: ticket.title,
       price: ticket.price,
+      version: ticket.version,
     })
 
     updated.then((result) => console.log(result))

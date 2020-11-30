@@ -466,10 +466,10 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
-"@mhunt/ticketing-common@^1.0.8":
-  version "1.0.17"
-  resolved "https://registry.yarnpkg.com/@mhunt/ticketing-common/-/ticketing-common-1.0.17.tgz#10cc76051a377b4a1d47173e5d8b05967d81a943"
-  integrity sha512-qqnna8CpC/+inYjy/ZEV/hGp6BYNMhzedJWEi2X+sUCzjSTFuVhS8x6dtFkdeoNYyS4RaBFTJK6oi5NQVCzQ/g==
+"@mhunt/ticketing-common@^1.0.18":
+  version "1.0.18"
+  resolved "https://registry.yarnpkg.com/@mhunt/ticketing-common/-/ticketing-common-1.0.18.tgz#042722ff50d7bc9ec94ff95aa6f987e2e79d77e7"
+  integrity sha512-UWC+MDSLigVeMiuEDnFrva/87m2ufUC2YQTW1+CkC6MBuuJl3neEu2vtUkIWYCiIEkw6jkbwH9H6cxvcRAsU/A==
   dependencies:
     "@types/cookie-session" "^2.0.41"
     "@types/express" "^4.17.9"
