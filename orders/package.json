@@ -15,7 +15,7 @@
     ]
   },
   "dependencies": {
-    "@mhunt/ticketing-common": "^1.0.8",
+    "@mhunt/ticketing-common": "^1.0.17",
     "@types/cookie-session": "^2.0.41",
     "@types/express": "^4.17.8",
     "@types/jsonwebtoken": "^8.5.0",

@@ -13,6 +13,10 @@ import { Order } from './Order'
 // update our duplicated data here acoordingly.
 
 interface TicketAttrs {
+  // We must provide an ID as we're mirrong data from another service.
+  // We need to be able to tie the tickets from ticketsservice and tickets
+  // on this service together
+  id: string
   title: string
   price: number
 }
@@ -52,7 +56,13 @@ const ticketSchema = new mongoose.Schema(
 
 // Adding a static method on to Ticket
 ticketSchema.statics.build = (attrs: TicketAttrs) => {
-  return new Ticket(attrs)
+  // Turning a passed 'id' back in to the _id that mongo needs
+  const { id, ...rest } = attrs
+
+  return new Ticket({
+    _id: id,
+    ...rest,
+  })
 }
 
 // Adding a method to each document (instance of ticket) to find an order which has already

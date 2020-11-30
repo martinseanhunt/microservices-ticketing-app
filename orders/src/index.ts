@@ -3,6 +3,9 @@ import mongoose from 'mongoose'
 import { app } from './app'
 import { natsWrapper } from './events/natsWrapper'
 
+import { TicketCreatedListener } from './events/listeners/TicketCreatedListener'
+import { TicketUpdatedListener } from './events/listeners/TicketUpdatedListener'
+
 // Connect to database and start server
 const connectAndStart = async () => {
   // check that our env variables are all set up
@@ -61,8 +64,12 @@ const connectAndStart = async () => {
     console.error(e)
   }
 
+  // listeners
+  new TicketCreatedListener(natsWrapper.client).listen()
+  new TicketUpdatedListener(natsWrapper.client).listen()
+
   // Start server
-  app.listen(3000, () => console.log('Orders service listening on 3000!'))
+  app.listen(3000, () => console.log('Orders service listening on port 3000!'))
 }
 
 connectAndStart()

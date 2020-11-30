@@ -24,7 +24,7 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
-    - image: martinseanhunt/ticketing-orders
+    - image: martinseanhunt/ticketing-ordersservice
       context: orders
       docker:
         dockerfile: Dockerfile
