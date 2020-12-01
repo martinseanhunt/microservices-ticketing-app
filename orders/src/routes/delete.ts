@@ -42,6 +42,7 @@ router.delete(
       ticket: {
         id: order.ticket.id,
       },
+      version: order.version,
     })
 
     console.log(pub)

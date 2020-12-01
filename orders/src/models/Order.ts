@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import { updateIfCurrentPlugin } from 'mongoose-update-if-current'
 
 import { OrderStatus } from '@mhunt/ticketing-common'
 
@@ -18,6 +19,7 @@ export interface OrderDoc extends mongoose.Document {
   status: OrderStatus
   expiresAt: Date
   ticket: TicketDoc
+  version: number
 }
 
 interface OrderModel extends mongoose.Model<OrderDoc> {
@@ -58,6 +60,12 @@ const orderSchema = new mongoose.Schema(
     },
   }
 )
+
+// Using our own 'version' field rather than the default __V for nicer formatted events etc
+orderSchema.set('versionKey', 'version')
+
+// wire up the update if current plugin for optimistic concurrency control
+orderSchema.plugin(updateIfCurrentPlugin)
 
 orderSchema.statics.build = (attrs: OrderAttrs) => {
   return new Order(attrs)

@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import { updateIfCurrentPlugin } from 'mongoose-update-if-current'
 
 import { OrderStatus } from '@mhunt/ticketing-common'
 import { Order } from './Order'
@@ -19,6 +20,7 @@ interface TicketAttrs {
   id: string
   title: string
   price: number
+  version: number
 }
 
 export interface TicketDoc extends mongoose.Document {
@@ -53,6 +55,14 @@ const ticketSchema = new mongoose.Schema(
     },
   }
 )
+
+// using our own version property instead of __v
+ticketSchema.set('versionKey', 'version')
+
+// plugin to handle optimistic concurrency control
+// increments version on each save and prevents previous versions
+// being saved over the current version
+ticketSchema.plugin(updateIfCurrentPlugin)
 
 // Adding a static method on to Ticket
 ticketSchema.statics.build = (attrs: TicketAttrs) => {
