@@ -1,6 +1,14 @@
 import mongoose from 'mongoose'
 
-import { updateIfCurrentPlugin } from 'mongoose-update-if-current'
+// We could use this plugin to handle updating the version of our copied
+// ticket data but in larger scale applications this might not be a good
+// idea becase we can't be certain of the semantics that another service might
+// be using to create it's version numbers.
+
+// this all works but going to comment out everything todo with this plugin here
+// in this branch just so I can play with building an alternative solution
+// to manage and increment version numbers without the help of a plugin
+// import { updateIfCurrentPlugin } from 'mongoose-update-if-current'
 
 import { OrderStatus } from '@mhunt/ticketing-common'
 import { Order } from './Order'
@@ -67,7 +75,21 @@ ticketSchema.set('versionKey', 'version')
 // plugin to handle optimistic concurrency control
 // increments version on each save and prevents previous versions
 // being saved over the current version
-ticketSchema.plugin(updateIfCurrentPlugin)
+
+// not using for this branch
+// ticketSchema.plugin(updateIfCurrentPlugin)
+
+// Since we're not using the updateIfCurrent plugin for this
+// branch we can use a pre-save hook to handle only allowing
+// save when the version numbers match instead.
+ticketSchema.pre('save', function (done) {
+  // modifying how mongoose is finding the record to update / overwrite
+  // @ts-ignore // types file doesn't know about the $where property
+  this.$where = {
+    version: this.get('version') - 1,
+  }
+  done()
+})
 
 // Adding a static method on to Ticket
 ticketSchema.statics.build = (attrs: TicketAttrs) => {

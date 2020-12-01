@@ -31,6 +31,11 @@ export class TicketUpdatedListener extends Listener<TicketUpdatedEvent> {
     ticket.set({
       title,
       price,
+      // for this branch only, I'm not using auto versioning plugin,
+      // so we explicity assign the version (once it's passed the above check)
+      // to be the version on the incoming event. This allows for different kinds of
+      // versioning semantics coming from other services
+      version,
     })
     await ticket.save()
 
