@@ -10,7 +10,7 @@ export class TicketUpdatedListener extends Listener<TicketUpdatedEvent> {
   queueGroupName = queueGroupName
 
   async onMessage(data: TicketUpdatedEvent['data'], msg: Message) {
-    const { title, price, id, version } = data
+    const { title, price, version } = data
 
     // Since this is referring to a ticket coming from another service
     // we need a way to make sure that the id's in both services are the
@@ -20,21 +20,21 @@ export class TicketUpdatedListener extends Listener<TicketUpdatedEvent> {
     // coming via the event - 1 to handle concurrency. If events
     // hit our service out of order they will fail and will be retried
     // unitl the correct order is processed
-    const ticket = await Ticket.findOne({
-      _id: id,
-      version: version - 1,
-    })
+    const ticket = await Ticket.findWithVersion(data)
 
     // TODO handle this case better
+    // TODO - understand why nats is closing the conenction on error
     if (!ticket)
       return console.log(`Ticket version ${version} coming in out of order`)
-    //throw new Error('ticket not found')
+    // throw new Error('ticket not found')
 
     ticket.set({
       title,
       price,
     })
     await ticket.save()
+
+    console.log(`ticket version ${ticket.version} saved`)
 
     msg.ack()
   }

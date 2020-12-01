@@ -32,6 +32,10 @@ export interface TicketDoc extends mongoose.Document {
 
 interface TicketModel extends mongoose.Model<TicketDoc> {
   build(attrs: TicketAttrs): TicketDoc
+  findWithVersion(event: {
+    id: string
+    version: number
+  }): Promise<TicketDoc | null>
 }
 
 const ticketSchema = new mongoose.Schema(
@@ -75,6 +79,23 @@ ticketSchema.statics.build = (attrs: TicketAttrs) => {
   return new Ticket({
     _id: id,
     ...rest,
+  })
+}
+
+// Adding a static method that is responsible for taking an event (e.g. ticket updated)
+// coming from another service and using the version and ID properties to find the previous
+// sequential version... E.g. if a ticketUpdated event is coming across with version 2
+// we want to find version 1 in this service so we can bring it up to date. If nothing is
+// found the events have liekly arrived in the wrong order so we don't want to make the update
+// or acknowledge the message. Then nats will retry until the events are processed in the right order
+// @ts-ignore - TODO
+ticketSchema.statics.findWithVersion = (event: {
+  id: string
+  version: number
+}) => {
+  return Ticket.findOne({
+    _id: event.id,
+    version: event.version - 1,
   })
 }
 
