@@ -66,6 +66,7 @@ router.post(
         id: order.ticket.id,
         price: order.ticket.price,
       },
+      version: order.version,
     })
     console.log(pub)
 

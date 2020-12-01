@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import { updateIfCurrentPlugin } from 'mongoose-update-if-current'
 
 import { OrderStatus } from '@mhunt/ticketing-common'
 import { Order } from './Order'
@@ -26,10 +27,15 @@ export interface TicketDoc extends mongoose.Document {
   price: number
   // helper method to find out whether a ticket has been reserved
   isReserved(): Promise<boolean>
+  version: number
 }
 
 interface TicketModel extends mongoose.Model<TicketDoc> {
   build(attrs: TicketAttrs): TicketDoc
+  findWithVersion(event: {
+    id: string
+    version: number
+  }): Promise<TicketDoc | null>
 }
 
 const ticketSchema = new mongoose.Schema(
@@ -44,8 +50,10 @@ const ticketSchema = new mongoose.Schema(
       min: 0,
     },
   },
+  // @ts-ignore - TODO
   {
     toJSON: {
+      // @ts-ignore - TODO
       transform(doc, ret) {
         ret.id = ret._id
         delete ret._id
@@ -54,7 +62,16 @@ const ticketSchema = new mongoose.Schema(
   }
 )
 
+// using our own version property instead of __v
+ticketSchema.set('versionKey', 'version')
+
+// plugin to handle optimistic concurrency control
+// increments version on each save and prevents previous versions
+// being saved over the current version
+ticketSchema.plugin(updateIfCurrentPlugin)
+
 // Adding a static method on to Ticket
+// @ts-ignore - TODO
 ticketSchema.statics.build = (attrs: TicketAttrs) => {
   // Turning a passed 'id' back in to the _id that mongo needs
   const { id, ...rest } = attrs
@@ -65,8 +82,26 @@ ticketSchema.statics.build = (attrs: TicketAttrs) => {
   })
 }
 
+// Adding a static method that is responsible for taking an event (e.g. ticket updated)
+// coming from another service and using the version and ID properties to find the previous
+// sequential version... E.g. if a ticketUpdated event is coming across with version 2
+// we want to find version 1 in this service so we can bring it up to date. If nothing is
+// found the events have liekly arrived in the wrong order so we don't want to make the update
+// or acknowledge the message. Then nats will retry until the events are processed in the right order
+// @ts-ignore - TODO
+ticketSchema.statics.findWithVersion = (event: {
+  id: string
+  version: number
+}) => {
+  return Ticket.findOne({
+    _id: event.id,
+    version: event.version - 1,
+  })
+}
+
 // Adding a method to each document (instance of ticket) to find an order which has already
 // reserved this ticket and return whether it exists or not
+// @ts-ignore - TODO
 ticketSchema.methods.isReserved = async function () {
   // Make sure the ticket is not already reserved or purchased
   // if we have a result here we know the ticket is reserved

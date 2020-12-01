@@ -53,12 +53,13 @@ beforeEach(async () => {
   jest.clearAllMocks()
 })
 
-afterAll(async () => {
+afterAll(async (done) => {
   // stop the instance and close connection
   await mongo.stop()
 
   // This is acting a bit funny sometimes - TODO: debug
   await mongoose.connection.close()
+  done()
 })
 
 // globally scoped helper function.. I don't think this is a good idea!

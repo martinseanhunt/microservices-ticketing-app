@@ -4,6 +4,8 @@ import mongoose from 'mongoose'
 // a record if it's the next version... e.g. updating from v1 - v3 will fail
 // This helps us handle concurrentcy issues when updating records between services.
 // See the tests for a better idea of exactly what this is doing
+
+// NOTE: Apparetly mongoose has this natively now... Look in to it!
 import { updateIfCurrentPlugin } from 'mongoose-update-if-current'
 
 // The attributes that are provided when creating a new ticket
@@ -21,7 +23,7 @@ interface TicketDoc extends mongoose.Document {
   userId: string
   // our custom version propery since we're not using the standard
   // __v from mongoose.doc
-  version: string
+  version: number
 }
 
 // Any methods or properties (statics) the Model itself has
