@@ -12,6 +12,8 @@ import { natsWrapper } from '../../events/natsWrapper'
 
 const URI = '/api/orders'
 
+const ticketId = mongoose.Types.ObjectId().toString()
+
 it('Returns 401 if no authed user', async () => {
   await request(app)
     .post(URI)
@@ -50,7 +52,7 @@ it('returns 400 if the ticket is already reserved', async () => {
   const cookie = global.signIn(user)
 
   // Create a ticket
-  const ticket = Ticket.build({ title: 'some title', price: 123 })
+  const ticket = Ticket.build({ title: 'some title', price: 123, id: ticketId })
   await ticket.save()
 
   // Create an order where the status is awaiting payment associated
@@ -72,7 +74,7 @@ it('returns 400 if the ticket is already reserved', async () => {
 
 it('Creates an order when a valid ID is passed and theres no order associated with the ticket', async () => {
   // Create a ticket
-  const ticket = Ticket.build({ title: 'some title', price: 123 })
+  const ticket = Ticket.build({ title: 'some title', price: 123, id: ticketId })
   await ticket.save()
 
   const res = await request(app)
@@ -99,7 +101,7 @@ it('Creates an order when a valid ID is passed and the existing order assicated 
   const cookie = global.signIn(user)
 
   // Create a ticket
-  const ticket = Ticket.build({ title: 'some title', price: 123 })
+  const ticket = Ticket.build({ title: 'some title', price: 123, id: ticketId })
   await ticket.save()
 
   // Create an order where the status is awaiting payment associated
@@ -129,7 +131,7 @@ it('Creates an order when a valid ID is passed and the existing order assicated 
 })
 
 it('Should publish an event on success', async () => {
-  const ticket = Ticket.build({ title: 'some title', price: 123 })
+  const ticket = Ticket.build({ title: 'some title', price: 123, id: ticketId })
   await ticket.save()
 
   const res = await request(app)

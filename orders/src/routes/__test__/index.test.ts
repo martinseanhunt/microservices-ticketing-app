@@ -7,12 +7,14 @@ import { app } from '../../app'
 import { Ticket } from '../../models/Ticket'
 import { Order } from '../../models/Order'
 
+const ticketId = () => mongoose.Types.ObjectId().toHexString()
+
 it('fetches orders for a user', async () => {
   // create some tickets
   const tickets = [
-    await Ticket.build({ title: 'test 1', price: 123 }).save(),
-    await Ticket.build({ title: 'test 2', price: 424 }).save(),
-    await Ticket.build({ title: 'test 3', price: 535 }).save(),
+    await Ticket.build({ title: 'test 1', price: 123, id: ticketId() }).save(),
+    await Ticket.build({ title: 'test 2', price: 424, id: ticketId() }).save(),
+    await Ticket.build({ title: 'test 3', price: 535, id: ticketId() }).save(),
   ]
 
   // create one order as usr 1

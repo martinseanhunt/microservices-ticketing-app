@@ -7,6 +7,8 @@ import { app } from '../../app'
 import { Ticket } from '../../models/Ticket'
 import { Order } from '../../models/Order'
 
+const ticketId = () => mongoose.Types.ObjectId().toHexString()
+
 it('fetches order with the given id for a user', async () => {
   const user1 = {
     email: 't@t.com',
@@ -17,8 +19,16 @@ it('fetches order with the given id for a user', async () => {
     id: mongoose.Types.ObjectId().toString(),
   }
 
-  const ticket = await Ticket.build({ title: 'test 1', price: 123 }).save()
-  const ticket2 = await Ticket.build({ title: 'test 2', price: 123 }).save()
+  const ticket = await Ticket.build({
+    title: 'test 1',
+    price: 123,
+    id: ticketId(),
+  }).save()
+  const ticket2 = await Ticket.build({
+    title: 'test 2',
+    price: 123,
+    id: ticketId(),
+  }).save()
 
   const order1 = await Order.build({
     status: OrderStatus.Created,
@@ -54,8 +64,16 @@ it('Returns 404 if you try to query someone elses order', async () => {
     id: mongoose.Types.ObjectId().toString(),
   }
 
-  const ticket = await Ticket.build({ title: 'test 1', price: 123 }).save()
-  const ticket2 = await Ticket.build({ title: 'test 2', price: 123 }).save()
+  const ticket = await Ticket.build({
+    title: 'test 1',
+    price: 123,
+    id: ticketId(),
+  }).save()
+  const ticket2 = await Ticket.build({
+    title: 'test 2',
+    price: 123,
+    id: ticketId(),
+  }).save()
 
   const order1 = await Order.build({
     status: OrderStatus.Created,

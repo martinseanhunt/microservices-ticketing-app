@@ -10,13 +10,19 @@ import { Order } from '../../models/Order'
 // Mocked
 import { natsWrapper } from '../../events/natsWrapper'
 
+const ticketId = mongoose.Types.ObjectId().toString()
+
 it('cancells order with the given id for a user', async () => {
   const user = {
     email: 't@t.com',
     id: mongoose.Types.ObjectId().toString(),
   }
 
-  const ticket = await Ticket.build({ title: 'test 1', price: 123 }).save()
+  const ticket = await Ticket.build({
+    title: 'test 1',
+    price: 123,
+    id: ticketId,
+  }).save()
 
   const order = await Order.build({
     status: OrderStatus.Created,
@@ -39,7 +45,11 @@ it('Returns 404 if you try to cancel someone elses order', async () => {
     id: mongoose.Types.ObjectId().toString(),
   }
 
-  const ticket = await Ticket.build({ title: 'test 1', price: 123 }).save()
+  const ticket = await Ticket.build({
+    title: 'test 1',
+    price: 123,
+    id: ticketId,
+  }).save()
 
   const order = await Order.build({
     status: OrderStatus.Created,
@@ -60,7 +70,11 @@ it('emits an order cancelled event', async () => {
     id: mongoose.Types.ObjectId().toString(),
   }
 
-  const ticket = await Ticket.build({ title: 'test 1', price: 123 }).save()
+  const ticket = await Ticket.build({
+    title: 'test 1',
+    price: 123,
+    id: ticketId,
+  }).save()
 
   const order = await Order.build({
     status: OrderStatus.Created,
