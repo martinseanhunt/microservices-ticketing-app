@@ -25,10 +25,10 @@ export class TicketUpdatedListener extends Listener<TicketUpdatedEvent> {
       version: version - 1,
     })
 
-    console.log(ticket)
-
     // TODO handle this case better
-    if (!ticket) throw new Error('ticket not found')
+    if (!ticket)
+      return console.log(`Ticket version ${version} coming in out of order`)
+    //throw new Error('ticket not found')
 
     ticket.set({
       title,

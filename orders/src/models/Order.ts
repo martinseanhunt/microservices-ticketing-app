@@ -51,8 +51,10 @@ const orderSchema = new mongoose.Schema(
       ref: 'Ticket',
     },
   },
+  // @ts-ignore - TODO
   {
     toJSON: {
+      // @ts-ignore - TODO
       transform(doc, ret) {
         ret.id = ret._id
         delete ret._id
@@ -67,6 +69,7 @@ orderSchema.set('versionKey', 'version')
 // wire up the update if current plugin for optimistic concurrency control
 orderSchema.plugin(updateIfCurrentPlugin)
 
+// @ts-ignore - TODO
 orderSchema.statics.build = (attrs: OrderAttrs) => {
   return new Order(attrs)
 }

@@ -20,7 +20,6 @@ interface TicketAttrs {
   id: string
   title: string
   price: number
-  version: number
 }
 
 export interface TicketDoc extends mongoose.Document {
@@ -28,6 +27,7 @@ export interface TicketDoc extends mongoose.Document {
   price: number
   // helper method to find out whether a ticket has been reserved
   isReserved(): Promise<boolean>
+  version: number
 }
 
 interface TicketModel extends mongoose.Model<TicketDoc> {
@@ -46,8 +46,10 @@ const ticketSchema = new mongoose.Schema(
       min: 0,
     },
   },
+  // @ts-ignore - TODO
   {
     toJSON: {
+      // @ts-ignore - TODO
       transform(doc, ret) {
         ret.id = ret._id
         delete ret._id
@@ -65,6 +67,7 @@ ticketSchema.set('versionKey', 'version')
 ticketSchema.plugin(updateIfCurrentPlugin)
 
 // Adding a static method on to Ticket
+// @ts-ignore - TODO
 ticketSchema.statics.build = (attrs: TicketAttrs) => {
   // Turning a passed 'id' back in to the _id that mongo needs
   const { id, ...rest } = attrs
@@ -77,6 +80,7 @@ ticketSchema.statics.build = (attrs: TicketAttrs) => {
 
 // Adding a method to each document (instance of ticket) to find an order which has already
 // reserved this ticket and return whether it exists or not
+// @ts-ignore - TODO
 ticketSchema.methods.isReserved = async function () {
   // Make sure the ticket is not already reserved or purchased
   // if we have a result here we know the ticket is reserved
