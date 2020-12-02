@@ -22,6 +22,8 @@ export class TicketCreatedListener extends Listener<TicketCreatedEvent> {
     })
     await ticket.save()
 
+    console.log('ticket saved to orders db')
+
     msg.ack()
   }
 }

@@ -18,12 +18,15 @@ interface TicketAttrs {
 
 // The attributest that are returned when requesting a ticket document
 interface TicketDoc extends mongoose.Document {
+  id: string
   title: string
   price: number
   userId: string
   // our custom version propery since we're not using the standard
   // __v from mongoose.doc
   version: number
+  // Order ID of an associated ticket. If this is not null then the ticket is locked
+  orderId?: string
 }
 
 // Any methods or properties (statics) the Model itself has
@@ -36,6 +39,7 @@ const ticketSchema = new mongoose.Schema(
     title: { type: String, required: true },
     price: { type: Number, required: true },
     userId: { type: String, required: true },
+    orderId: { type: String, required: false },
   },
   {
     toJSON: {

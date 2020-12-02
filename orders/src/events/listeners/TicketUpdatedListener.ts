@@ -23,6 +23,9 @@ export class TicketUpdatedListener extends Listener<TicketUpdatedEvent> {
     const ticket = await Ticket.findWithVersion(data)
 
     // TODO handle this case better
+    // it woudld be better
+    // to throw here but for some reason nats is closing the connection
+    // on errors in the listeners.
     // TODO - understand why nats is closing the conenction on error
     if (!ticket)
       return console.log(`Ticket version ${version} coming in out of order`)
@@ -34,7 +37,7 @@ export class TicketUpdatedListener extends Listener<TicketUpdatedEvent> {
     })
     await ticket.save()
 
-    console.log(`ticket version ${ticket.version} saved`)
+    console.log(`ticket version ${ticket.version} updated`)
 
     msg.ack()
   }
