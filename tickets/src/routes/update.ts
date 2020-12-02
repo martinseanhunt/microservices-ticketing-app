@@ -6,6 +6,7 @@ import {
   NotFoundError,
   handleValidationErrors,
   AuthorizationError,
+  BadRequestError,
 } from '@mhunt/ticketing-common'
 
 import { Ticket } from '../models/Ticket'
@@ -35,6 +36,10 @@ router.put(
     if (!ticket) throw new NotFoundError()
     if (ticket.userId !== req.currentUser?.id)
       throw new AuthorizationError('Not your ticket! GETTTOUUUTAHERE')
+
+    // if there's an order ID then there is an associated order with this
+    // ticket so it is RESERVED and can't be edited unless the order is cancelled
+    if (ticket.orderId) throw new BadRequestError('Tickt is reserved')
 
     ticket.set({
       price,

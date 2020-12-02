@@ -160,3 +160,37 @@ it('publishes an event', async () => {
   // this could be way better ;)
   expect(natsWrapper.client.publish).toHaveBeenCalled()
 })
+
+it('rejects updates if the ticket is reserved', async () => {
+  const testUser = {
+    id: mongoose.Types.ObjectId().toHexString(),
+    email: 'test@tst.com',
+  }
+
+  // create a ticket where the userID is the same as our id
+  const ticket = Ticket.build({
+    userId: testUser.id,
+    title: '123',
+    price: 12.5,
+  })
+
+  // add an order id propery signalling the ticket is reserved
+  ticket.set({ orderId: mongoose.Types.ObjectId().toHexString })
+
+  await ticket.save()
+
+  const updates = {
+    title: 'test',
+    price: 12.4,
+  }
+
+  // Try to update our newly created ticket
+  const res = await request(app)
+    .put(`/api/tickets/${ticket.id}`)
+    // sign in with our fake user
+    .set('Cookie', global.signIn(testUser))
+    .send(updates)
+
+  // expect the bad request error
+  expect(res.status).toBe(400)
+})

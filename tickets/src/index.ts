@@ -3,6 +3,7 @@ import mongoose from 'mongoose'
 import { app } from './app'
 import { natsWrapper } from './events/natsWrapper'
 import { OrderCreatedListener } from './events/listeners/OrderCreatedListener'
+import { OrderCancelledListener } from './events/listeners/OrderCancelledListener'
 
 // Connect to database and start server
 const connectAndStart = async () => {
@@ -64,6 +65,7 @@ const connectAndStart = async () => {
 
   // Event listeners
   new OrderCreatedListener(natsWrapper.client).listen()
+  new OrderCancelledListener(natsWrapper.client).listen()
 
   // Start server
   app.listen(3000, () => console.log('Tickets service listening on 3000!'))
