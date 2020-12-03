@@ -34,6 +34,16 @@ build:
             dest: .
           - src: '**/*.css'
             dest: .
+    - image: martinseanhunt/ticketing-expiration
+      context: expiration
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '**/*.js'
+            dest: .
+          - src: '**/*.css'
+            dest: .
     - image: martinseanhunt/ticketing/client
       context: client
       docker:

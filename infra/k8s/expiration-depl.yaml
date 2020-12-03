@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: expiration-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: expiration
+  template:
+    metadata:
+      labels:
+        app: expiration
+    spec:
+      containers:
+        - name: expiration
+          image: martinseanhunt/ticketing-expiration
+          env:
+            - name: REDIS_HOST
+              value: expiration-redis-srv
+            - name: NATS_URI
+              value: 'http://nats-srv:4222'
+            - name: NATS_CLUSTER_ID
+              value: 'nats-ticketing'
+            - name: NATS_CLIENT_ID
+              # using this to dynamically set the value to the pod name
+              # as this value needs to be unique for ALL instances of the service
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+# Expiration doesn't need a clusterIP service as it's not accepting any incoming http
+# requests etc. All communication (incoming and outgoing) happens via NATS
