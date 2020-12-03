@@ -1,5 +1,8 @@
 import Queue from 'bull'
 
+import { ExpirationCompletePublisher } from '../events/publishers/ExpirationCompletePublisher'
+import { natsWrapper } from '../events/natsWrapper'
+
 // Creating an interface to tell TS what kind of data we're going to
 // store in the job so that jobs are type safe.
 interface Payload {
@@ -32,7 +35,12 @@ const expirationQueue = new Queue<Payload>(
 // e.g. an express server may create jobs on http request and some other service may
 // process the computaitonally expensive jobs
 expirationQueue.process(async (job) => {
-  console.log(`the order ${job.data.orderId} has expired`)
+  // Publish the Expiration complete event
+  const res = new ExpirationCompletePublisher(natsWrapper.client).publish({
+    orderId: job.data.orderId,
+  })
+
+  console.log(res)
 })
 
 export { expirationQueue }
