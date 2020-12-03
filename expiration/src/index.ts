@@ -1,4 +1,5 @@
 import { natsWrapper } from './events/natsWrapper'
+import { OrderCreatedListener } from './events/listeners/OrderCreatedListener'
 
 // Connect to database and start server
 const connectAndStart = async () => {
@@ -43,6 +44,9 @@ const connectAndStart = async () => {
     // nats to close, ultimately shutting down the server
     process.on('SIGINT', () => natsWrapper.client.close())
     process.on('SIGTERM', () => natsWrapper.client.close())
+
+    // start the listener
+    new OrderCreatedListener(natsWrapper.client).listen()
   } catch (e) {
     console.error(e)
   }

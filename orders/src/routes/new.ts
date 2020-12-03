@@ -18,7 +18,7 @@ const router = express.Router()
 
 // Should probably put this in an env variable
 // or in the database as an admin configurable setting
-const EXPIRATION_WINDOW_SECONDS = 15 * 60
+const EXPIRATION_WINDOW_SECONDS = 1 * 60
 
 router.post(
   '/api/orders',
