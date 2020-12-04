@@ -5,6 +5,7 @@ import { natsWrapper } from './events/natsWrapper'
 
 import { TicketCreatedListener } from './events/listeners/TicketCreatedListener'
 import { TicketUpdatedListener } from './events/listeners/TicketUpdatedListener'
+import { ExpirationCompleteListener } from './events/listeners/ExpirationCompleteListener'
 
 // Connect to database and start server
 const connectAndStart = async () => {
@@ -67,6 +68,7 @@ const connectAndStart = async () => {
   // listeners
   new TicketCreatedListener(natsWrapper.client).listen()
   new TicketUpdatedListener(natsWrapper.client).listen()
+  new ExpirationCompleteListener(natsWrapper.client).listen()
 
   // Start server
   app.listen(3000, () => console.log('Orders service listening on port 3000!'))
