@@ -36,9 +36,11 @@ const expirationQueue = new Queue<Payload>(
 // process the computaitonally expensive jobs
 expirationQueue.process(async (job) => {
   // Publish the Expiration complete event
-  const res = new ExpirationCompletePublisher(natsWrapper.client).publish({
-    orderId: job.data.orderId,
-  })
+  const res = await new ExpirationCompletePublisher(natsWrapper.client).publish(
+    {
+      orderId: job.data.orderId,
+    }
+  )
 
   console.log(res)
 })
