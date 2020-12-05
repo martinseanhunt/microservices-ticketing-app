@@ -41,6 +41,7 @@ const userSchema = new mongoose.Schema(
         // in order to see them reflected in what gets returned from JSON.stringifyt
         delete ret.password
         ret.id = ret._id
+        delete ret._id
       },
     },
     // deletes the __V property

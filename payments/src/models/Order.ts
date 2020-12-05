@@ -42,6 +42,10 @@ interface OrderDoc extends mongoose.Document {
 
 interface OrderModel extends mongoose.Model<OrderDoc> {
   build(attrs: OrderAttrs): OrderDoc
+  findWithVersion(event: {
+    id: string
+    version: number
+  }): Promise<OrderDoc | null>
 }
 
 const orderSchema = new mongoose.Schema(
@@ -79,6 +83,22 @@ orderSchema.set('versionKey', 'version')
 // wire up updateIfCurrentPlugin for auto incremeting versions and
 // not allowing out of sync writes.
 orderSchema.plugin(updateIfCurrentPlugin)
+
+// Adding a static method that is responsible for taking an event (e.g. Order cancelled)
+// coming from another service and using the version and ID properties to find the previous
+// sequential version... E.g. if a orderCancelled event is coming across with version 2
+// we want to find version 1 in this service so we can bring it up to date. If nothing is
+// found the events have liekly arrived in the wrong order so we don't want to make the update
+// or acknowledge the message. Then nats will retry until the events are processed in the right order
+orderSchema.statics.findWithVersion = (event: {
+  id: string
+  version: number
+}) => {
+  return Order.findOne({
+    _id: event.id,
+    version: event.version - 1,
+  })
+}
 
 // custom build function so we can type check incoming attribuets
 orderSchema.statics.build = (attrs: OrderAttrs) => {

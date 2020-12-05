@@ -17,7 +17,11 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
       version: data.version,
     })
 
-    await order.save()
+    try {
+      await order.save()
+    } catch (e) {
+      return console.error(e)
+    }
 
     console.log('Order saved')
 

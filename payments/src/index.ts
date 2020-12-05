@@ -2,6 +2,8 @@ import mongoose from 'mongoose'
 
 import { app } from './app'
 import { natsWrapper } from './events/natsWrapper'
+import { OrderCreatedListener } from './events/listeners/OrderCreatedListener'
+import { OrderCancelledListener } from './events/listeners/OrderCancelledListener'
 
 // Connect to database and start server
 const connectAndStart = async () => {
@@ -57,9 +59,23 @@ const connectAndStart = async () => {
     // nats to close, ultimately shutting down the server
     process.on('SIGINT', () => natsWrapper.client.close())
     process.on('SIGTERM', () => natsWrapper.client.close())
+
+    // start the listeners
+    const listener = new OrderCreatedListener(natsWrapper.client).listen()
+    console.log(listener)
+    new OrderCancelledListener(natsWrapper.client).listen()
   } catch (e) {
     console.error(e)
   }
+
+  console.log(
+    process.env.NATS_CLUSTER_ID,
+    // Remember, this  needs to be unique so that when we have multiple instances
+    // of a service running each instance has it's own nats client ID
+    // all client ID's connected to the nats server needs to be unique
+    process.env.NATS_CLIENT_ID,
+    process.env.NATS_URI
+  )
 
   // Start server
   app.listen(3000, () => console.log('Payments service listening on 3000!'))
