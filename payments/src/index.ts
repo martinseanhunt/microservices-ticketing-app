@@ -14,6 +14,8 @@ const connectAndStart = async () => {
   if (!process.env.JWT_KEY) throw new Error('Environment var jwt key not found')
   if (!process.env.MONGO_URI)
     throw new Error('Environment var MONGO_URI not found')
+  if (!process.env.STRIPE_KEY)
+    throw new Error('Environment var STRIPE_KEY not found')
 
   if (
     !process.env.NATS_URI ||
