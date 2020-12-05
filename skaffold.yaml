@@ -44,6 +44,16 @@ build:
             dest: .
           - src: '**/*.css'
             dest: .
+    - image: martinseanhunt/ticketing-payments
+      context: payments
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '**/*.js'
+            dest: .
+          - src: '**/*.css'
+            dest: .
     - image: martinseanhunt/ticketing/client
       context: client
       docker:

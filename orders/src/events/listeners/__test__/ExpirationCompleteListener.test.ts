@@ -75,4 +75,4 @@ it('aks the message', async () => {
   expect(msg.ack).toHaveBeenCalledTimes(1)
 })
 
-// it doesn't cancel cancelled or completed orders
+// it doesn't cancel completed orders
