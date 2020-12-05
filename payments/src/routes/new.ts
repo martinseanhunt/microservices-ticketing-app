@@ -3,6 +3,7 @@ import { body } from 'express-validator'
 
 import { stripe } from '../lib/stripe'
 import { Payment } from '../models/Payment'
+import { PaymentCreatedPublisher } from '../events/publsihers/PaymentCreatedPublisher'
 
 import {
   protectedRoute,
@@ -14,6 +15,7 @@ import {
 } from '@mhunt/ticketing-common'
 
 import { Order } from '../models/Order'
+import { natsWrapper } from '../events/natsWrapper'
 
 const router = express.Router()
 
@@ -51,7 +53,17 @@ router.post(
 
     await payment.save()
 
-    res.status(201).send({ success: true })
+    // publsih event letting other servies know the payment was taken successfully
+    const publishRes = await new PaymentCreatedPublisher(
+      natsWrapper.client
+    ).publish({
+      id: payment.id,
+      orderId: payment.orderId,
+      stripeId: payment.stripeId,
+    })
+    console.log(publishRes)
+
+    res.status(201).send(payment)
   }
 )
 

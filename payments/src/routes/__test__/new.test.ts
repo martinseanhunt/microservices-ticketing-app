@@ -128,3 +128,7 @@ it('returns 201 with valid inputs', async () => {
 
   expect(payment?.stripeId).toEqual(charge?.id)
 })
+
+// it returns the payment document
+
+// it published a payment created event
