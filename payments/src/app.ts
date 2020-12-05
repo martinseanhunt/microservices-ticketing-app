@@ -5,6 +5,8 @@ import 'express-async-errors'
 import { json } from 'body-parser'
 import cookieSession from 'cookie-session'
 
+import { createChargeRouter } from './routes/new'
+
 import {
   NotFoundError,
   errorHandler,
@@ -37,6 +39,7 @@ app.use(
 app.use(currentUser)
 
 // Routes
+app.use(createChargeRouter)
 
 // Catch all route handler and 404
 app.all('*', () => {

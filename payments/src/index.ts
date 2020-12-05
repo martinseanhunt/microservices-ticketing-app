@@ -61,8 +61,7 @@ const connectAndStart = async () => {
     process.on('SIGTERM', () => natsWrapper.client.close())
 
     // start the listeners
-    const listener = new OrderCreatedListener(natsWrapper.client).listen()
-    console.log(listener)
+    new OrderCreatedListener(natsWrapper.client).listen()
     new OrderCancelledListener(natsWrapper.client).listen()
   } catch (e) {
     console.error(e)
