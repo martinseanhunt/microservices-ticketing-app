@@ -9,3 +9,5 @@ jobs:
     steps: 
       - uses: actions/checkout@v2
       - run: cd payments && yarn install && yarn test:ci
+        env: 
+          STRIPE_KEY: sk_test_51Hv4IwDJfkPtdHtDbutq27LmOBurucygDUIUKxjGoqtxzrM2fACxU7L5TMaXHen14gsqV5DdWhmPAGbuq7k20ild00mZzGvpKq
