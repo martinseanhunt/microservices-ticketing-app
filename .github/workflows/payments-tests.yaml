@@ -1,13 +1,15 @@
 name: payments-tests
 
 on:
-  pull_request
-  
+  pull_request:
+    # Only run tests if files in payments have changed
+    paths: 'payments/**'
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    steps: 
+    steps:
       - uses: actions/checkout@v2
       - run: cd payments && yarn install && yarn test:ci
-        env: 
+        env:
           STRIPE_KEY: sk_test_51Hv4IwDJfkPtdHtDbutq27LmOBurucygDUIUKxjGoqtxzrM2fACxU7L5TMaXHen14gsqV5DdWhmPAGbuq7k20ild00mZzGvpKq

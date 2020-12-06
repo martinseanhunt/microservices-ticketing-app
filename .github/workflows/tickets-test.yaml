@@ -1,11 +1,13 @@
 name: tickets-tests
 
 on:
-  pull_request
-  
+  pull_request:
+    # Only run tests if files in tickets have changed
+    paths: 'tickets/**'
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    steps: 
+    steps:
       - uses: actions/checkout@v2
       - run: cd tickets && yarn install && yarn test:ci

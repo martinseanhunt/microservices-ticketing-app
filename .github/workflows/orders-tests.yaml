@@ -1,11 +1,13 @@
 name: orders-tests
 
 on:
-  pull_request
-  
+  pull_request:
+    # Only run tests if files in orders have changed
+    paths: 'orders/**'
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    steps: 
+    steps:
       - uses: actions/checkout@v2
       - run: cd orders && yarn install && yarn test:ci
