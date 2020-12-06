@@ -23,8 +23,6 @@ export default function Home({ currentUser, tickets }) {
 const HomeContent = ({ tickets }) => {
   const { currentUser } = useCurrentUser()
 
-  console.log(tickets)
-
   return (
     <Box>
       <Heading as="h1" size="lg" fontWeight="300">
@@ -68,8 +66,6 @@ const HomeContent = ({ tickets }) => {
 }
 
 export async function getServerSideProps(context) {
-  const tickets = await makeserverSideRequest('/api/tickets', context.req)
-
   return {
     props: {
       currentUser: await getCurrentUser(context),

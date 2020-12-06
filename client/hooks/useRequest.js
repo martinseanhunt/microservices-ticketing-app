@@ -10,11 +10,11 @@ export default function useRequest({
   const [errors, setErrors] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const doRequest = async () => {
+  const doRequest = async (props = {}) => {
     setErrors()
     setIsSubmitting(true)
     try {
-      const res = await axios[method.toLowerCase()](url, body)
+      const res = await axios[method.toLowerCase()](url, { ...body, ...props })
       onSuccess(res.data)
     } catch (e) {
       setErrors(e.response.data.errors)

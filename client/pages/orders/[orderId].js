@@ -7,6 +7,7 @@ import {
   AlertTitle,
   AlertDescription,
 } from '@chakra-ui/react'
+import StripeCheckout from 'react-stripe-checkout'
 
 import useRequest from '../../hooks/useRequest'
 import getCurrentUser from '../../util/serversidehelpers/getCurrentUser'
@@ -30,19 +31,31 @@ export default function Ticket({ currentUser, order }) {
   }, [])
 
   const { doRequest, isSubmitting, errors } = useRequest({
-    url: '/api/orders',
+    url: '/api/payments',
     method: 'POST',
     body: {
       orderId: order.id,
     },
     onSuccess: (data) => {
-      router.push(`/orders/${order.id}`)
+      console.log(data)
+      router.push(`/orders`)
     },
   })
 
-  const purchaseTicket = () => doRequest()
+  const handleToken = (token) => {
+    doRequest({ token: token.id })
+  }
+
+  console.log(order.status)
 
   const expired = timeLeft < 1 || order.status === 'Cancelled'
+
+  if (order?.status === 'complete')
+    return (
+      <Layout currentUser={currentUser}>
+        <div>Your purchase was successful</div>
+      </Layout>
+    )
 
   return (
     <Layout currentUser={currentUser}>
@@ -60,6 +73,15 @@ export default function Ticket({ currentUser, order }) {
 
               <p>Your order expires in {timeLeft} seconds</p>
 
+              <StripeCheckout
+                token={handleToken}
+                stripeKey="pk_test_51Hv4IwDJfkPtdHtDhljhiSKwrF6NOuVPA3YNaNf4tnKdBXgLu5h0Lh5KogjMe0XO5iX7gpv3r789FYZzSOi1IcrE00S11YgcEc"
+                amount={order.ticket.price * 100}
+                email={currentUser.email}
+                currency="GBP"
+              />
+
+              {/*
               <Button
                 size="sm"
                 colorScheme="pink"
@@ -70,6 +92,7 @@ export default function Ticket({ currentUser, order }) {
               >
                 Purchase ticket
               </Button>
+              */}
 
               {errors?.map((e) => (
                 <Alert status="error" mb={5} key={e.message}>

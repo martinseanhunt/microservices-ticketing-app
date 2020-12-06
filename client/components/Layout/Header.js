@@ -4,8 +4,10 @@ import { SunIcon } from '@chakra-ui/icons'
 
 import useRequest from '../../hooks/useRequest'
 import { useCurrentUser } from '../../contexts/CurrentUser'
+import { useRouter } from 'next/router'
 
 export default function Header() {
+  const router = useRouter()
   const { colorMode, toggleColorMode } = useColorMode()
   const { currentUser, setCurrentUser } = useCurrentUser()
 
@@ -14,6 +16,7 @@ export default function Header() {
     method: 'POST',
     onSuccess: () => {
       setCurrentUser(null)
+      router.push('/')
     },
   })
 
@@ -31,7 +34,7 @@ export default function Header() {
       </Heading>
       <Grid
         gap="10px"
-        templateColumns="repeat(3, min-content)"
+        templateColumns="repeat(4, min-content)"
         justifyContent="end"
         justifyItems="end"
         pt={['10px', '0']}
@@ -41,6 +44,11 @@ export default function Header() {
             <Link href="/tickets/new">
               <Button size="sm" colorScheme="pink" variant="outline">
                 Sell a ticket
+              </Button>
+            </Link>
+            <Link href="/orders">
+              <Button size="sm" colorScheme="pink" variant="outline">
+                My Orders
               </Button>
             </Link>
             <Button size="sm" onClick={onSignout}>
