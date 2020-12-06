@@ -1,4 +1,4 @@
-name: tests
+name: auth-tests
 
 on:
   pull_request
@@ -9,5 +9,3 @@ jobs:
     steps: 
       - uses: actions/checkout@v2
       - run: cd auth && yarn install && yarn test:ci
-      - run: cd ../tickets && yarn install && yarn test:ci
-      - run: cd ../orders && yarn install && yarn test:ci
