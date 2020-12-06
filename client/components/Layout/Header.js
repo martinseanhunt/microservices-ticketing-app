@@ -37,9 +37,16 @@ export default function Header() {
         pt={['10px', '0']}
       >
         {currentUser ? (
-          <Button size="sm" onClick={onSignout}>
-            Sign Out
-          </Button>
+          <>
+            <Link href="/tickets/new">
+              <Button size="sm" colorScheme="pink" variant="outline">
+                Sell a ticket
+              </Button>
+            </Link>
+            <Button size="sm" onClick={onSignout}>
+              Sign Out
+            </Button>
+          </>
         ) : (
           <>
             <Link href="/signup">

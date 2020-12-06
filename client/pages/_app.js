@@ -1,6 +1,10 @@
 import { ChakraProvider, extendTheme } from '@chakra-ui/react'
 import { mode } from '@chakra-ui/theme-tools'
 
+// IMPORTANT NOTE - I'M DOING THIS PROJECT TO LEARN MORE
+// ABOUT MICROSERVICES ARCHITECTURE. THIS FRONT END IS MESSY
+// AND QUICK AND NOT INTENDED TO BE ANYTHING CLOSE TO PRODUCTION GRADE CODE
+
 const config = {
   useSystemColorMode: false,
   initialColorMode: 'dark',

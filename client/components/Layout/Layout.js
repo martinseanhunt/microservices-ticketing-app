@@ -12,7 +12,7 @@ import Header from './Header'
 export default function Home({ currentUser, children, render }) {
   return (
     <CurrentUserProvider value={currentUser}>
-      <Container maxW="lg">
+      <Container maxWidth="900px">
         <Header />
         {children}
       </Container>
