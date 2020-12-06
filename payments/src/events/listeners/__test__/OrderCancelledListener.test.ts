@@ -103,6 +103,7 @@ it('doesnt ack the message if the version numbers are out of sync', async () => 
     error = e
   }
 
-  expect(error).toBeTruthy()
+  // we're not throwing here anymore
+  //expect(error).toBeTruthy()
   expect(msg.ack).toHaveBeenCalledTimes(0)
 })
