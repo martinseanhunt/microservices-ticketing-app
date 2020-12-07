@@ -1,7 +1,11 @@
 import makeserverSideRequest from './makeServerSideRequest'
 
 export default async function getAllTickets({ req }) {
-  const res = await makeserverSideRequest('/api/tickets', req)
-
-  return res?.data
+  try {
+    const res = await makeserverSideRequest('/api/tickets', req)
+  } catch (e) {
+    console.error('something went wrong getting tickets')
+    console.error(e)
+  }
+  return res?.data || []
 }
