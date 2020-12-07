@@ -24,7 +24,7 @@ const connectAndStart = async () => {
   }
 
   // Start server
-  app.listen(3000, () => console.log('Auth service listening on port: 3000!'))
+  app.listen(3000, () => console.log('Auth service listening on port 3000!'))
 }
 
 connectAndStart()
