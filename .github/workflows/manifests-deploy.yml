@@ -1,0 +1,37 @@
+# Takes all of our kubernetes manifests in infra/k8s and gets them running on
+# digtal ocean kubernetes cluster
+name: manifests-deploy
+
+on:
+  push:
+    branches:
+      # push is triggered when a PR is merged in to master
+      - master
+    paths:
+      # Only run when manifest files have changed
+      - 'infra/**'
+
+jobs:
+  # this is the job id and can be whatever we want
+  build:
+    # comes with docker pre installed
+    runs-on: ubuntu-latest
+    steps:
+      # uses tells the job to retrieve a community action
+      # this action checks out the repository and downloads it
+      # to the runner so we can run further actions / commands against the code
+      - uses: actions/checkout@v2
+
+      # reach in to our kubernetes cluster on digital ocean so we can
+      # tell the kubernetes to apply the new manifests
+
+      # install doctl command line tool so we can connect to the kluster in digital ocean
+      # using the digital ocean provided action
+      - uses: digitalocean/action-doctl
+        # use our digital ocean access token stored in gthub secrets
+        with:
+          token: ${{ secrets.DIGITAL_OCEAN_ACCESS_TOKEN }}
+      # connect to our kubernetes cluster on DO
+      - run: doctl kubernetes cluster kubeconfig save ce58a3a2-acc2-4d95-8a26-65b0f31c1990
+      # apply the new manifests
+      - run: kubectl apply -f infra/k8s
