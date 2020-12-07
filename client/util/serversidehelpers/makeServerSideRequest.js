@@ -16,7 +16,9 @@ export default async function makeServerSideRequest(
 
   // TODO get this from env file
   const baseUrl =
-    'http://ingress-nginx-controller.ingress-nginx.svc.cluster.local'
+    process.env.ENVIRONMENT === 'dev'
+      ? 'http://ingress-nginx-controller.ingress-nginx.svc.cluster.local'
+      : 'http://ticketing.mh.codes'
 
   let res = null
 
@@ -38,6 +40,7 @@ export default async function makeServerSideRequest(
       ...options,
     })
   } catch (e) {
+    console.log(`server side request failed for ${apiPath}`)
     console.error(e.message)
   }
 
