@@ -1,5 +1,5 @@
 # don't forget to setup ingress-nginx on whatever env is being deployed to
-# e.g. https://kubernetes.github.io/ingress-nginx/deploy/#digital-ocean
+# e.g. https://kubernetes.github.io/ingress-nginx/deploy/#digital-ocean.
 
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
