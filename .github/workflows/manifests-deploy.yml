@@ -1,5 +1,5 @@
 # Takes all of our kubernetes manifests in infra/k8s and gets them running on
-# digtal ocean kubernetes cluster
+# digtal ocean kubernetes cluster.
 name: manifests-deploy
 
 on:
