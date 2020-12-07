@@ -35,7 +35,7 @@ spec:
               servicePort: 3030
 # the following allows for communication between pods
 # via the managed load balancer on DO
-# see https://github.com/digitalocean/digitalocean-cloud-controller-manager/blob/master/docs/controllers/services/examples/README.md#accessing-pods-over-a-managed-load-balancer-from-inside-the-cluster
+# see https://github.com/digitalocean/digitalocean-cloud-controller-manager/blob/master/docs/controllers/services/examples/README.md#accessing-pods-over-a-managed-load-balancer-from-inside-the-cluster.
 ---
 apiVersion: v1
 kind: Service
