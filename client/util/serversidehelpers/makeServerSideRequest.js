@@ -6,7 +6,7 @@ export default async function makeServerSideRequest(
   options = {}
 ) {
   // we need to request to ingress-nginx because if we just do /api/* then it will be makign
-  // the request within the running container for this sevice
+  // the request within the running container for this sevice.
 
   // http://NAMEOFSERVICE.NAMESPACE.svc.custer.local
   // is the pattern for reaching out across namespaces within a kubernetes cluster
