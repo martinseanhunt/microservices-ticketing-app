@@ -26,7 +26,7 @@ const connectAndStart = async () => {
       process.env.NATS_CLUSTER_ID,
       // Remember, this  needs to be unique so that when we have multiple instances
       // of a service running each instance has it's own nats client ID
-      // all client ID's connected to the nats server needs to be unique
+      // all client ID's connected to the nats server needs to be unique.
       process.env.NATS_CLIENT_ID,
       process.env.NATS_URI
     )

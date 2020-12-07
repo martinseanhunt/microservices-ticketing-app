@@ -5,7 +5,7 @@ import { natsWrapper } from './events/natsWrapper'
 import { OrderCreatedListener } from './events/listeners/OrderCreatedListener'
 import { OrderCancelledListener } from './events/listeners/OrderCancelledListener'
 
-// Connect to database and start server
+// Connect to database and start server.
 const connectAndStart = async () => {
   // check that our env variables are all set up
   // We have to check this exists because TS doesn't let us assume it is set
