@@ -34,7 +34,9 @@ app.use(
     signed: false,
     // Only send cookies over https
     // unless we're in a test env
-    secure: process.env.NODE_ENV !== 'test',
+    // secure: process.env.NODE_ENV !== 'test',
+    // allowing unsecure for now while we set up the live deploy
+    secure: false,
   })
 )
 
