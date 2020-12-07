@@ -1,15 +1,7 @@
 import makeserverSideRequest from './makeServerSideRequest'
 
 export default async function getCurrentUser({ req }) {
-  let res
-  try {
-    res = await makeserverSideRequest('/api/users/currentuser', req)
-  } catch (e) {
-    console.error('something went wrong')
-    console.error(e)
-  }
-
-  console.log(res)
+  const res = await makeserverSideRequest('/api/users/currentuser', req)
 
   return res?.data?.currentUser || null
 }
