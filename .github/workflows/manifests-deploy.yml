@@ -33,5 +33,7 @@ jobs:
           token: ${{ secrets.DIGITAL_OCEAN_ACCESS_TOKEN }}
       # connect to our kubernetes cluster on DO
       - run: doctl kubernetes cluster kubeconfig save ce58a3a2-acc2-4d95-8a26-65b0f31c1990
-      # apply the new manifests
-      - run: kubectl apply -f infra/k8s
+      # apply the new manifests. We've split our manifests in to a k8s directory
+      # which contains manifests to apply in all envs, and prod with prod specific setup
+      # e.g. the correct domain name in the ingress manifest
+      - run: kubectl apply -f infra/k8s && kubectl apply -f infra/k8s-prod
