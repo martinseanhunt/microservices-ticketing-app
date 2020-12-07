@@ -32,7 +32,7 @@ export class OrderCancelledListener extends Listener<OrderCancelledEvent> {
 
     await order.save()
 
-    console.log('Order status updated to cancelled')
+    console.log('Order status marked as cancelled')
 
     msg.ack()
   }
