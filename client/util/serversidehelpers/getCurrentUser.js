@@ -9,5 +9,7 @@ export default async function getCurrentUser({ req }) {
     console.error(e)
   }
 
+  console.log(res)
+
   return res?.data?.currentUser || null
 }
