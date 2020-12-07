@@ -1,0 +1,49 @@
+name: client-deploy
+
+on:
+  push:
+    branches:
+      # push is triggered when a PR is merged in to master
+      - master
+    paths:
+      # Only run when files in auth service have changed
+      - 'client/**'
+
+jobs:
+  # this is the job id and can be whatever we want
+  build:
+    # comes with docker pre installed
+    runs-on: ubuntu-latest
+    steps:
+      # uses tells the job to retrieve a community action
+      # this action checks out the repository and downloads it
+      # to the runner so we can run further actions / commands against the code
+      - uses: actions/checkout@v2
+
+      # Build and push the docker image
+
+      # change in to the service and build the docker image
+      - run: cd client && docker build -t martinseanhunt/ticketing-client .
+      # using secrets defined in the repo to login to docker hub
+      - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        # sets the env for this command, here we're setting the env variaables
+        # which are used in the above command from our github secrets
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      # push the docker image to docker hub
+      - run: docker push martinseanhunt/ticketing-client
+
+      # reach in to our kubernetes cluster on digital ocean so we can
+      # tell the kubernetes auth deployment to use the new image we just built
+
+      # install doctl command line tool so we can connect to the kluster in digital ocean
+      # using the digital ocean provided action
+      - uses: digitalocean/action-doctl@v2
+        # use our digital ocean access token stored in gthub secrets
+        with:
+          token: ${{ secrets.DIGITAL_OCEAN_ACCESS_TOKEN }}
+      # connect to our kubernetes cluster on DO
+      - run: doctl kubernetes cluster kubeconfig save ce58a3a2-acc2-4d95-8a26-65b0f31c1990
+      # tell the deployment running in our kluster on DO to use the latest image we just pushed
+      - run: kubectl rollout restart deployment client-depl

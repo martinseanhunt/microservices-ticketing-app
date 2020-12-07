@@ -59,7 +59,7 @@ const connectAndStart = async () => {
     })
 
     // listening for terminate and interrupt signals and telling
-    // nats to close, ultimately shutting down the server
+    // nats to close, ultimately shutting down the server.
     process.on('SIGINT', () => natsWrapper.client.close())
     process.on('SIGTERM', () => natsWrapper.client.close())
   } catch (e) {
