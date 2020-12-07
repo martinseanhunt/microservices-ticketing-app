@@ -27,7 +27,7 @@ jobs:
 
       # install doctl command line tool so we can connect to the kluster in digital ocean
       # using the digital ocean provided action
-      - uses: digitalocean/action-doctl
+      - uses: digitalocean/action-doctl@v2
         # use our digital ocean access token stored in gthub secrets
         with:
           token: ${{ secrets.DIGITAL_OCEAN_ACCESS_TOKEN }}
