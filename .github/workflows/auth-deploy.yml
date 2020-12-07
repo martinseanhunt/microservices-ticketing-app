@@ -19,6 +19,9 @@ jobs:
       # this action checks out the repository and downloads it
       # to the runner so we can run further actions / commands against the code
       - uses: actions/checkout@v2
+
+      # Build and push the docker image
+
       # change in to the service and build the docker image
       - run: cd auth && docker build -t martinseanhunt/ticketing-auth .
       # using secrets defined in the repo to login to docker hub
@@ -30,3 +33,17 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       # push the docker image to docker hub
       - run: docker push martinseanhunt/ticketing-auth
+
+      # reach in to our kubernetes cluster on digital ocean so we can
+      # tell the kubernetes auth deployment to use the new image we just built
+
+      # install doctl command line tool so we can connect to the kluster in digital ocean
+      # using the digital ocean provided action
+      - uses: digitalocean/action-doctl
+        # use our digital ocean access token stored in gthub secrets
+        with:
+          token: ${{ secrets.DIGITAL_OCEAN_ACCESS_TOKEN }}
+      # connect to our kubernetes cluster on DO
+      - run: doctl kubernetes cluster kubeconfig save ce58a3a2-acc2-4d95-8a26-65b0f31c1990
+      # tell the deployment running in our kluster on DO to use the latest image we just pushed
+      - run: kubectl rollout restart deployment auth-depl
