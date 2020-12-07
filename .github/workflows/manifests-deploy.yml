@@ -1,4 +1,6 @@
-name: auth-deploy
+# Takes all of our kubernetes manifests in infra/k8s and gets them running on
+# digtal ocean kubernetes cluster
+name: manifests-deploy
 
 on:
   push:
@@ -6,8 +8,8 @@ on:
       # push is triggered when a PR is merged in to master
       - master
     paths:
-      # Only run when files in auth service have changed
-      - 'auth/**'
+      # Only run when manifest files have changed
+      - 'infra/**'
 
 jobs:
   # this is the job id and can be whatever we want
@@ -20,22 +22,8 @@ jobs:
       # to the runner so we can run further actions / commands against the code
       - uses: actions/checkout@v2
 
-      # Build and push the docker image
-
-      # change in to the service and build the docker image
-      - run: cd auth && docker build -t martinseanhunt/ticketing-auth .
-      # using secrets defined in the repo to login to docker hub
-      - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-        # sets the env for this command, here we're setting the env variaables
-        # which are used in the above command from our github secrets
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      # push the docker image to docker hub
-      - run: docker push martinseanhunt/ticketing-auth
-
       # reach in to our kubernetes cluster on digital ocean so we can
-      # tell the kubernetes auth deployment to use the new image we just built
+      # tell the kubernetes to apply the new manifests
 
       # install doctl command line tool so we can connect to the kluster in digital ocean
       # using the digital ocean provided action
@@ -45,5 +33,7 @@ jobs:
           token: ${{ secrets.DIGITAL_OCEAN_ACCESS_TOKEN }}
       # connect to our kubernetes cluster on DO
       - run: doctl kubernetes cluster kubeconfig save ce58a3a2-acc2-4d95-8a26-65b0f31c1990
-      # tell the deployment running in our kluster on DO to use the latest image we just pushed
-      - run: kubectl rollout restart deployment auth-depl
+      # apply the new manifests. We've split our manifests in to a k8s directory
+      # which contains manifests to apply in all envs, and prod with prod specific setup
+      # e.g. the correct domain name in the ingress manifest
+      - run: kubectl apply -f infra/k8s && kubectl apply -f infra/k8s-prod
