@@ -15,7 +15,6 @@ spec:
       labels:
         app: tickets-mongo
     spec:
-      #terminationGracePeriodSeconds: 10 ?
       volumes:
         - name: tickets-mongo-storage
           persistentVolumeClaim:
