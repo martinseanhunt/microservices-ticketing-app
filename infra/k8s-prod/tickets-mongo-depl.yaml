@@ -18,13 +18,26 @@ spec:
       volumes:
         - name: tickets-mongo-storage
           persistentVolumeClaim:
-            claimName: tickets-db-pv-claim
+            claimName: tickets-db-bs-claim
       containers:
         - name: tickets-mongo
           image: mongo
           volumeMounts:
             - mountPath: '/data/db'
               name: tickets-mongo-storage
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: tickets-db-bs-claim
+spec:
+  storageClassName: do-block-storage
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
 ---
 apiVersion: v1
 kind: Service
@@ -39,31 +52,3 @@ spec:
       protocol: TCP
       port: 27017
       targetPort: 27017
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: tickets-mongo-pv
-  labels:
-    type: local
-spec:
-  storageClassName: manual
-  capacity:
-    storage: 2Gi
-  accessModes:
-    - ReadWriteOnce
-  hostPath:
-    path: '/mnt/data'
-  persistentVolumeReclaimPolicy: Retain
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: tickets-db-pv-claim
-spec:
-  storageClassName: manual
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 2Gi
