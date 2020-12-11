@@ -79,7 +79,7 @@ const connectAndStart = async () => {
   )
 
   // Start server
-  app.listen(3000, () => console.log('Payments service listening on: 3000!'))
+  app.listen(3000, () => console.log('Payments service listening on 3000!'))
 }
 
 connectAndStart()
