@@ -4,8 +4,6 @@ metadata:
   name: tickets-mongo-depl
   labels:
     app: tickets-mongo
-    # testing to see how DO handles this
-    someLabelChange: test
 spec:
   replicas: 1
   serviceName: 'tickets-mongo'
@@ -42,16 +40,12 @@ spec:
       port: 27017
       targetPort: 27017
 ---
-# Setting up persistant storage in digital ocean... Of course would
-# want to do this for every service in a real world app
 apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: tickets-mongo-pv
   labels:
     type: local
-    # testing to see how DO handles this on an existing volume
-    someLabelChange: test
 spec:
   storageClassName: manual
   capacity:
