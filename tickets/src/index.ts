@@ -68,7 +68,7 @@ const connectAndStart = async () => {
   new OrderCancelledListener(natsWrapper.client).listen()
 
   // Start server
-  app.listen(3000, () => console.log('Tickets service listening on 3000!'))
+  app.listen(3000, () => console.log('Tickets service listening on: 3000!'))
 }
 
 connectAndStart()

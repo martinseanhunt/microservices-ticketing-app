@@ -73,7 +73,7 @@ const connectAndStart = async () => {
   new PaymentCreatedListener(natsWrapper.client).listen()
 
   // Start server
-  app.listen(3000, () => console.log('Orders service listening on port 3000!'))
+  app.listen(3000, () => console.log('Orders service listening on port: 3000!'))
 }
 
 connectAndStart()
