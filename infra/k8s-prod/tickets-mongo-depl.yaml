@@ -26,6 +26,8 @@ spec:
             - mountPath: '/data/db'
               name: tickets-mongo-storage
 ---
+# Setting up persistant storage in digital ocean... Of course would
+# want to do this for every service in a real world app
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:

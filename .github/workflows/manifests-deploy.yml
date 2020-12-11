@@ -32,7 +32,7 @@ jobs:
         with:
           token: ${{ secrets.DIGITAL_OCEAN_ACCESS_TOKEN }}
       # connect to our kubernetes cluster on DO
-      - run: doctl kubernetes cluster kubeconfig save ce58a3a2-acc2-4d95-8a26-65b0f31c1990
+      - run: doctl kubernetes cluster kubeconfig save af93fb68-c1cc-4fe3-8f13-cbd1b55d7ea4
       # apply the new manifests. We've split our manifests in to a k8s directory
       # which contains manifests to apply in all envs, and prod with prod specific setup
       # e.g. the correct domain name in the ingress manifest

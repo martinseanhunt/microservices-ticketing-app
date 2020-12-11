@@ -44,6 +44,6 @@ jobs:
         with:
           token: ${{ secrets.DIGITAL_OCEAN_ACCESS_TOKEN }}
       # connect to our kubernetes cluster on DO
-      - run: doctl kubernetes cluster kubeconfig save ce58a3a2-acc2-4d95-8a26-65b0f31c1990
+      - run: doctl kubernetes cluster kubeconfig save af93fb68-c1cc-4fe3-8f13-cbd1b55d7ea4
       # tell the deployment running in our kluster on DO to use the latest image we just pushed
       - run: kubectl rollout restart deployment orders-depl
