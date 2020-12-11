@@ -1,9 +1,12 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: tickets-mongo-depl
+  labels:
+    app: tickets-mongo
 spec:
   replicas: 1
+  serviceName: 'tickets-mongo'
   selector:
     matchLabels:
       app: tickets-mongo
@@ -12,9 +15,16 @@ spec:
       labels:
         app: tickets-mongo
     spec:
+      volumes:
+        - name: tickets-mongo-storage
+          persistentVolumeClaim:
+            claimName: tickets-db-pv-claim
       containers:
         - name: tickets-mongo
           image: mongo
+          volumeMounts:
+            - mountPath: '/data/db'
+              name: tickets-mongo-storage
 ---
 apiVersion: v1
 kind: Service
@@ -29,3 +39,31 @@ spec:
       protocol: TCP
       port: 27017
       targetPort: 27017
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: tickets-mongo-pv
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: '/mnt/data'
+  persistentVolumeReclaimPolicy: Retain
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: tickets-db-pv-claim
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi

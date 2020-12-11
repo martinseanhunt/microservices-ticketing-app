@@ -41,6 +41,22 @@ spec:
       targetPort: 27017
 ---
 apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: tickets-mongo-pv
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: '/mnt/data'
+  persistentVolumeReclaimPolicy: Retain
+---
+apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: tickets-db-pv-claim
@@ -50,4 +66,4 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi
+      storage: 2Gi
