@@ -12,7 +12,7 @@ const connectAndStart = async () => {
     !process.env.NATS_CLUSTER_ID ||
     !process.env.NATS_CLIENT_ID
   )
-    throw new Error('Environment variables for NATS not found')
+    throw new Error('Environment variables for NATS not found.')
 
   try {
     // connecting to nats in a way that we're able to pass the client down to
